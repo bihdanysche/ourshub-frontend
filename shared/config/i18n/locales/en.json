@@ -124,5 +124,91 @@
       "terminate_success": "Session terminated successfully",
       "terminate_all_success": "All other sessions have been terminated"
     }
+  },
+  "landing": {
+    "badge": "For you and your squad",
+    "hero_title_1": "A cozy social network",
+    "hero_title_2": "for your friend circle.",
+    "hero_description": "Create private spaces for your squad, share photos, memories, and moments strictly between yourselves. And when hanging out, easily split group expenses without messy calculations. Fast login via Telegram.",
+    "cta_primary": "Log in via Telegram",
+    "cta_secondary": "Explore features",
+    "highlights": {
+      "private_title": "Strictly for friends",
+      "private_desc": "Posts and photos are visible only to company members",
+      "instant_auth_title": "Simple login",
+      "instant_auth_desc": "1-click Telegram login without complicated forms",
+      "smart_splits_title": "Shared splits",
+      "smart_splits_desc": "Simple expense splitting after parties and road trips"
+    },
+    "example_box": {
+      "badge": "Real life example",
+      "title": "Example: Squad party or a weekend getaway",
+      "text": "You got together with your crew for a hangout or trip. One person covers food and drinks. They simply create a split inside your company, enter the total bill, and Ours Hub calculates everyone's share while showing who paid and who owes."
+    },
+    "features": {
+      "badge": "About the space",
+      "title": "Everything for a warm vibe",
+      "subtitle": "No public feed, no strangers, and no awkward math after parties.",
+      "company": {
+        "title": "Private Companies",
+        "desc": "Create separate spaces for your closest friends, roommates, or travel buddies. Everything posted inside stays strictly between you."
+      },
+      "media": {
+        "title": "A feed for yourselves",
+        "desc": "Share photos, inside jokes, and party memories. Zero algorithms and zero strangers."
+      },
+      "splits": {
+        "title": "Effortless splits",
+        "desc": "Someone bought snacks and drinks for the party? Create a split in your company and easily keep track of who contributed."
+      },
+      "auth": {
+        "title": "Telegram login",
+        "desc": "No tedious registration forms or passwords to memorize. One click with Telegram and you are with your squad."
+      },
+      "transparency": {
+        "title": "Complete transparency",
+        "desc": "Everyone in the company sees who covered the bill, who already sent their share, and what's left."
+      },
+      "custom_shares": {
+        "title": "Flexible splitting",
+        "desc": "Split equally among all participants or set individual amounts when someone ordered separately."
+      }
+    },
+    "how_it_works": {
+      "badge": "How it works",
+      "title": "Super straightforward",
+      "subtitle": "Get started and hang out with your crew in less than a minute.",
+      "step1_title": "Log in with Telegram",
+      "step1_desc": "No emails or passwords — just authenticate in one click.",
+      "step2_title": "Create a Company",
+      "step2_desc": "Invite your friends using a direct invite link.",
+      "step3_title": "Share moments",
+      "step3_desc": "Post photos, inside memes, and plan your next hangouts.",
+      "step4_title": "Split shared bills",
+      "step4_desc": "Create splits for group purchases and track contributions."
+    },
+    "use_cases": {
+      "badge": "Everyday use cases",
+      "title": "Built for shared memories",
+      "item1_title": "Parties & Celebrations",
+      "item1_desc": "Birthdays, celebrations, or weekend hangouts — settle the table bill without messy calculators.",
+      "item2_title": "Trips & Getaways",
+      "item2_desc": "Cabin rentals, road trips, barbecues — keep shared memories and split expenses fairly.",
+      "item3_title": "Roommates & Flatmates",
+      "item3_desc": "Utilities, apartment groceries, and a private cozy chat all in one space.",
+      "item4_title": "Best Friend Circles",
+      "item4_desc": "Inside jokes, photo dumps, and a comfortable sanctuary for your inner circle."
+    },
+    "cta_banner": {
+      "title": "Bring your squad together",
+      "subtitle": "Create a cozy private space for your friends and enjoy your time together without friction.",
+      "button": "Log in via Telegram",
+      "note": "Fast • Free • No passwords"
+    },
+    "footer": {
+      "brand_desc": "A cozy social space and shared expense splitter for your inner circle.",
+      "privacy_note": "Private space for your company of friends",
+      "rights": "All rights reserved."
+    }
   }
 }

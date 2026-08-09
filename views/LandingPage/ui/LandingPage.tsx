@@ -1,22 +1,28 @@
 "use client";
-import { Button } from "@heroui/react";
-import { useTranslation } from "react-i18next";
+
+import { CtaSection } from "./components/CtaSection";
+import { FeaturesSection } from "./components/FeaturesSection";
+import { HeroSection } from "./components/HeroSection";
+import { HowItWorksSection } from "./components/HowItWorksSection";
+import { LandingFooter } from "./components/LandingFooter";
+import { UseCasesSection } from "./components/UseCasesSection";
 
 export function LandingPage() {
-  const { t, i18n } = useTranslation();
-
-  const toggleLanguage = () => {
-    const nextLang = i18n.language === "en" ? "uk" : "en";
-    i18n.changeLanguage(nextLang);
+  const handleScrollToFeatures = () => {
+    const el = document.getElementById("features");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
-    <div>
-      <h1>{t("temporary_test.welcome")}</h1>
-
-      <Button onClick={toggleLanguage}>
-        {t("temporary_test.change_lang")}
-      </Button>
+    <div className="w-(--page-width) max-w-full flex flex-col items-center px-4 sm:px-6 md:px-0">
+      <HeroSection onExploreClick={handleScrollToFeatures} />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <UseCasesSection />
+      <CtaSection />
+      <LandingFooter />
     </div>
   );
 }
