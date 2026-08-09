@@ -1,1 +1,6 @@
-export { apiClient, getErrorMessage } from "./api-client";
+export {
+  apiClient,
+  getApiErrorCode,
+  getErrorMessage,
+  isUnauthorizedError,
+} from "./api-client";

@@ -2,5 +2,46 @@
   "temporary_test": {
     "welcome": "Hello World!",
     "change_lang": "Change language"
+  },
+  "common": {
+    "success": "Success!",
+    "error": "Error"
+  },
+  "header": {
+    "login_via_tg": "Login via Telegram",
+    "settings": "Settings",
+    "logout": "Log out",
+    "error_user": "Failed to load profile"
+  },
+  "auth_guard": {
+    "loading": "Loading...",
+    "server_error_title": "Server Connection Error",
+    "server_error_desc": "Unable to connect to the server. Please check your internet connection or try again later.",
+    "retry_btn": "Try again"
+  },
+  "api_errors": {
+    "BAD_REQUEST": "Bad request",
+    "UNAUTHORIZED": "Authentication required",
+    "FORBIDDEN": "Access denied",
+    "NOT_FOUND": "Not found",
+    "CONFLICT": "Data conflict",
+    "TOO_MANY_REQUESTS": "Too many requests",
+    "INTERNAL_SERVER_ERROR": "Internal server error",
+    "TELEGRAM_AUTH_FAILED": "Telegram authentication failed",
+    "INVALID_TELEGRAM_ID_TOKEN": "Invalid Telegram ID token",
+    "TG_AUTH_EXPIRED": "Telegram authentication has expired",
+    "INVALID_OAUTH_STATE": "Invalid OAuth authentication state",
+    "ALREADY_AUTHENTICATED": "You are already logged in",
+    "AUTH_ALREADY_IN_PROGRESS": "Authentication is already in progress",
+    "SESSION_NOT_FOUND": "Session not found",
+    "SESSION_EXPIRED": "Session has expired",
+    "INVALID_ACCESS_TOKEN": "Invalid access token",
+    "INVALID_REFRESH_TOKEN": "Invalid refresh token",
+    "ACCESS_TOKEN_NOT_EXPIRED": "Access token is not expired",
+    "REFRESH_TOKEN_REQUIRED": "Refresh token is required",
+    "UNKNOWN_ERROR": "Unknown error"
+  },
+  "auth": {
+    "success_auth_desc": "You successfully logged in via Telegram!"
   }
 }

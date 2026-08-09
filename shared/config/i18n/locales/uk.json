@@ -2,5 +2,46 @@
   "temporary_test": {
     "welcome": "Привіт, світ!",
     "change_lang": "Змінити мову"
+  },
+  "common": {
+    "success": "Успіх!",
+    "error": "Помилка"
+  },
+  "header": {
+    "login_via_tg": "Зайти через Telegram",
+    "settings": "Налаштування",
+    "logout": "Вийти",
+    "error_user": "Не вдалося завантажити профіль"
+  },
+  "auth_guard": {
+    "loading": "Завантаження...",
+    "server_error_title": "Помилка зв'язку з сервером",
+    "server_error_desc": "Не вдалося встановити з'єднання з сервером. Перевірте інтернет-з'єднання або спробуйте пізніше.",
+    "retry_btn": "Спробувати знову"
+  },
+  "api_errors": {
+    "BAD_REQUEST": "Неправильний запит",
+    "UNAUTHORIZED": "Необхідна авторизація",
+    "FORBIDDEN": "Доступ заборонено",
+    "NOT_FOUND": "Не знайдено",
+    "CONFLICT": "Конфлікт даних",
+    "TOO_MANY_REQUESTS": "Забагато запитів",
+    "INTERNAL_SERVER_ERROR": "Внутрішня помилка сервера",
+    "TELEGRAM_AUTH_FAILED": "Не вдалося авторизуватися через Telegram",
+    "INVALID_TELEGRAM_ID_TOKEN": "Недійсний токен Telegram ID",
+    "TG_AUTH_EXPIRED": "Авторизація через Telegram закінчилася",
+    "INVALID_OAUTH_STATE": "Недійсний стан OAuth-авторизації",
+    "ALREADY_AUTHENTICATED": "Ви вже авторизовані",
+    "AUTH_ALREADY_IN_PROGRESS": "Процес авторизації вже триває",
+    "SESSION_NOT_FOUND": "Сесію не знайдено",
+    "SESSION_EXPIRED": "Термін дії сесії минув",
+    "INVALID_ACCESS_TOKEN": "Недійсний токен доступу",
+    "INVALID_REFRESH_TOKEN": "Недійсний токен оновлення",
+    "ACCESS_TOKEN_NOT_EXPIRED": "Токен доступу ще дійсний",
+    "REFRESH_TOKEN_REQUIRED": "Потрібен токен оновлення",
+    "UNKNOWN_ERROR": "Невідома помилка"
+  },
+  "auth": {
+    "success_auth_desc": "Ви успішно зайшли через Telegram!"
   }
 }
