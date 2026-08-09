@@ -5,14 +5,9 @@ export interface UserMe {
   avatar: string | null;
 }
 
-export interface SessionItem {
-  id: number;
-  ip: string;
-  agent: string;
-  createdAt: string;
-  lastUsedAt: string;
-  expiresAt: string;
-  isCurrent: boolean;
+export interface EditProfileDto {
+  name?: string;
+  username?: string;
 }
 
 export interface ApiResponseOk {

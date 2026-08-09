@@ -10,11 +10,11 @@ export default function Header() {
       <div className="mx-auto flex w-(--page-width) items-center justify-between py-5">
         <Link
           href="/"
-          className="relative flex cursor-pointer flex-row items-center justify-center gap-1 active:top-[1px]"
+          className="relative flex cursor-pointer flex-row items-center justify-center gap-3 active:top-px"
         >
           <Image
-            className="relative top-2"
-            src="/logo.png"
+            className="relative -top-1"
+            src="/app_icon.png"
             alt="Logo"
             width={65}
             height={65}

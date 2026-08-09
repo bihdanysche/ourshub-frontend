@@ -86,7 +86,6 @@ apiClient.interceptors.response.use(
       originalRequest.url?.includes("/auth/logout") ||
       originalRequest.url?.includes("/auth/telegram");
 
-    // Only attempt token refresh if it's an access token expiration on a protected endpoint
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
@@ -94,7 +93,6 @@ apiClient.interceptors.response.use(
     ) {
       const code = getApiErrorCode(error);
 
-      // Do not attempt refresh if user has no tokens at all or refresh is not applicable
       if (
         code === "UNAUTHORIZED" ||
         code === "REFRESH_TOKEN_REQUIRED" ||
@@ -104,7 +102,6 @@ apiClient.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      // If already refreshing, wait for in-flight refresh to complete
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -117,13 +114,9 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await apiClient.post(
-          "/auth/refresh",
-          {},
-          {
-            _retry: true,
-          } as CustomAxiosRequestConfig,
-        );
+        await apiClient.post("/auth/refresh", {}, {
+          _retry: true,
+        } as CustomAxiosRequestConfig);
         processQueue(null);
         return apiClient(originalRequest);
       } catch (refreshError) {

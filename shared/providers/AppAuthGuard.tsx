@@ -3,7 +3,14 @@
 import { useMe } from "@/entities/auth";
 import { getApiErrorCode, isUnauthorizedError } from "@/shared/api";
 import { ArrowRotateRight, TriangleExclamationFill } from "@gravity-ui/icons";
-import { Button, Card, CardContent, CardHeader, CardTitle, Spinner } from "@heroui/react";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Spinner,
+} from "@heroui/react";
 import { useTranslation } from "react-i18next";
 
 interface AppAuthGuardProps {
@@ -11,10 +18,16 @@ interface AppAuthGuardProps {
 }
 
 export function AppAuthGuard({ children }: AppAuthGuardProps) {
-  const { data: user, isPending, isError, error, refetch, isFetching } = useMe();
+  const {
+    data: user,
+    isPending,
+    isError,
+    error,
+    refetch,
+    isFetching,
+  } = useMe();
   const { t, i18n } = useTranslation();
 
-  // Show full-screen loader only when query is initially pending with no resolved data
   if (isPending && user === undefined) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-md">

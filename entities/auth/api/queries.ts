@@ -1,6 +1,6 @@
 import { apiClient, isUnauthorizedError } from "@/shared/api";
 import { useQuery } from "@tanstack/react-query";
-import { SessionItem, UserMe } from "../model/types";
+import { UserMe } from "../model/types";
 import { authKeys } from "./auth.keys";
 
 export const useMe = () => {
@@ -19,15 +19,5 @@ export const useMe = () => {
     },
     retry: false,
     staleTime: 1000 * 60 * 5,
-  });
-};
-
-export const useSessions = () => {
-  return useQuery<SessionItem[]>({
-    queryKey: authKeys.sessions,
-    queryFn: async () => {
-      const res = await apiClient.get<SessionItem[]>("/auth/sessions");
-      return ((res as any)?.data ?? res) as SessionItem[];
-    },
   });
 };

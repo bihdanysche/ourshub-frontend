@@ -7,6 +7,10 @@
     "success": "Success!",
     "error": "Error"
   },
+  "time": {
+    "just_now": "just now",
+    "yesterday": "yesterday"
+  },
   "header": {
     "login_via_tg": "Login via Telegram",
     "settings": "Settings",
@@ -39,9 +43,86 @@
     "INVALID_REFRESH_TOKEN": "Invalid refresh token",
     "ACCESS_TOKEN_NOT_EXPIRED": "Access token is not expired",
     "REFRESH_TOKEN_REQUIRED": "Refresh token is required",
+    "CANNOT_SHUTDOWN_CURRENT_SESSION": "Cannot terminate current session",
+    "EMPTY_UPDATE_PAYLOAD": "Update data cannot be empty",
+    "USERNAME_ALREADY_TAKEN": "This username is already taken",
+    "TOKEN_EXPIRED": "Access token has expired",
     "UNKNOWN_ERROR": "Unknown error"
   },
   "auth": {
     "success_auth_desc": "You successfully logged in via Telegram!"
+  },
+  "settings": {
+    "title": "Settings",
+    "nav": {
+      "profile": "My Profile",
+      "sessions": "Sessions",
+      "appearance": "Appearance"
+    },
+    "profile": {
+      "title": "My Profile",
+      "description": "Manage your profile details and personal information",
+      "avatar_title": "Profile Avatar",
+      "avatar_desc": "The ability to change your avatar will be available in a future update",
+      "name_label": "Name",
+      "name_placeholder": "Enter your name",
+      "name_helper": "Your display name visible to other users",
+      "username_label": "Username",
+      "username_placeholder": "Enter username",
+      "username_helper": "Unique username used to identify your account",
+      "cancel_btn": "Cancel",
+      "save_btn": "Save changes",
+      "save_success": "Profile updated successfully",
+      "validation": {
+        "name_min": "Name must be at least 1 character long",
+        "name_max": "Name cannot exceed 30 characters",
+        "name_trim": "Name cannot start or end with spaces",
+        "username_min": "Username must be at least 3 characters long",
+        "username_max": "Username cannot exceed 30 characters",
+        "username_start_letter": "Username must start with a Latin letter",
+        "username_chars": "Only Latin letters, numbers, underscores, and dots are allowed",
+        "username_spaces": "Username cannot contain spaces"
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "description": "Customize your interface theme and language",
+      "language": {
+        "title": "Interface Language",
+        "description": "Select the language used throughout the application",
+        "en": "English",
+        "uk": "Ukrainian"
+      },
+      "theme": {
+        "title": "Theme",
+        "description": "Select your preferred color mode",
+        "dark": "Dark",
+        "light": "Light"
+      }
+    },
+    "sessions": {
+      "title": "Sessions",
+      "description": "Manage active sessions and devices connected to your account",
+      "current_title": "Current Session",
+      "current_badge": "This device",
+      "other_title": "Other Sessions",
+      "terminate_all_btn": "Terminate all others",
+      "terminate_btn": "Terminate",
+      "last_active": "Last active",
+      "created_at": "Created",
+      "no_other_sessions": "No other active sessions",
+      "no_other_sessions_desc": "You are only logged in on this device.",
+      "error_title": "Failed to load sessions",
+      "error_desc": "An error occurred while fetching your active sessions.",
+      "retry_btn": "Try again",
+      "modal_single_title": "Terminate Session?",
+      "modal_single_desc": "Are you sure you want to terminate this session? The device will be logged out immediately.",
+      "modal_all_title": "Terminate All Other Sessions?",
+      "modal_all_desc": "Are you sure you want to terminate all other active sessions? All other devices will be logged out.",
+      "cancel_btn": "Cancel",
+      "confirm_btn": "Terminate",
+      "terminate_success": "Session terminated successfully",
+      "terminate_all_success": "All other sessions have been terminated"
+    }
   }
 }

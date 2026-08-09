@@ -249,6 +249,7 @@ stable machine-readable string, never a human-readable message.
   around the codebase.
 - Don't duplicate logic — if similar UI/logic exists elsewhere, extract it into `shared` or
   the appropriate entity/feature instead of copy-pasting.
+- **No code comments**: do not add explanatory, inline, TODO, or JSDoc comments in code unless explicitly requested by the user. Code must be completely self-documenting through clean naming, proper typing, and clear structure.
 - Naming conventions:
   - Components — `PascalCase` files/exports.
   - Hooks — `camelCase`, prefixed with `use`.
@@ -268,6 +269,7 @@ stable machine-readable string, never a human-readable message.
 - Never add a translation key to `en.json` without the matching key in `uk.json` (and vice versa).
 - Never invent a new entity/feature/widget structure without following `entities/example_entity`
   or the closest existing analogous slice.
+- Never leave explanatory, inline, or JSDoc comments in the code.
 
 ---
 
@@ -280,5 +282,6 @@ stable machine-readable string, never a human-readable message.
 - [ ] No hardcoded user-facing strings — everything goes through `t()`.
 - [ ] Any new `error_code` has a translated key in both `en.json` and `uk.json` under `api_errors`.
 - [ ] Any new non-error string has a key in both `en.json` and `uk.json`, in the right namespace.
+- [ ] No explanatory or inline comments were left in the code.
 - [ ] New code respects FSD layer boundaries (no upward/sideways imports).
 - [ ] File/folder structure and naming match the rest of the project.
