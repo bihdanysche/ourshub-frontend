@@ -47,6 +47,17 @@
     "EMPTY_UPDATE_PAYLOAD": "Update data cannot be empty",
     "USERNAME_ALREADY_TAKEN": "This username is already taken",
     "TOKEN_EXPIRED": "Access token has expired",
+    "CREW_NOT_FOUND": "Crew not found",
+    "MEMBER_NOT_FOUND": "Member not found",
+    "INVITATION_NOT_FOUND": "Invitation link not found or expired",
+    "ALREADY_MEMBER": "You are already a member of this crew",
+    "CREW_IS_FULL": "Crew has reached the maximum number of members",
+    "USER_CREWS_LIMIT_REACHED": "You have reached the maximum limit of crews",
+    "ONLY_OWNER_CAN_DELETE_CREW": "Only the crew owner can delete the crew",
+    "ONLY_OWNER_CAN_UPDATE_CREW": "Only the crew owner can update the crew",
+    "ONLY_OWNER_CAN_KICK_MEMBERS": "Only the crew owner can remove members",
+    "CANNOT_EDIT_OTHER_MEMBER_ALIAS": "You cannot change the alias of other members",
+    "CANNOT_LEAVE_AS_OWNER": "The owner cannot leave the crew, delete it instead",
     "UNKNOWN_ERROR": "Unknown error"
   },
   "auth": {
@@ -209,6 +220,148 @@
       "brand_desc": "A cozy social space and shared expense splitter for your inner circle.",
       "privacy_note": "Private space for your company of friends",
       "rights": "All rights reserved."
+    }
+  },
+  "home": {
+    "title": "My Crews",
+    "subtitle": "Private spaces and friendly squad hangouts",
+    "create_crew_btn": "Create Crew",
+    "members_count_one": "{{count}} member",
+    "members_count_other": "{{count}} members",
+    "open_crew": "Open",
+    "create_card_title": "Create new crew",
+    "create_card_desc": "Set up a private space for your friends",
+    "empty_title": "No crews yet",
+    "empty_desc": "You haven't joined or created any crews yet. Create your first crew to get started!",
+    "create_first_crew": "Create your first crew",
+    "error_title": "Failed to load crews",
+    "error_desc": "An error occurred while fetching your crews list.",
+    "retry_btn": "Try again",
+    "roles": {
+      "owner": "Owner",
+      "member": "Member"
+    },
+    "card_menu": {
+      "edit": "Edit crew",
+      "delete": "Delete crew",
+      "leave": "Leave crew"
+    },
+    "create_modal": {
+      "title": "Create Crew",
+      "subtitle": "Create a private space for your squad",
+      "name_label": "Crew name",
+      "name_placeholder": "e.g. The Troublemakers",
+      "cancel_btn": "Cancel",
+      "submit_btn": "Create",
+      "success_toast": "Crew created successfully!"
+    },
+    "edit_modal": {
+      "title": "Edit Crew",
+      "subtitle": "Change your squad name",
+      "name_label": "Crew name",
+      "name_placeholder": "Enter crew name",
+      "cancel_btn": "Cancel",
+      "save_btn": "Save changes",
+      "success_toast": "Crew updated successfully!"
+    },
+    "delete_modal": {
+      "title": "Delete Crew",
+      "desc": "Are you sure you want to delete \"{{title}}\"? This will permanently delete the crew for all members.",
+      "confirm_label": "Type CONFIRM to proceed",
+      "confirm_placeholder": "CONFIRM",
+      "cancel_btn": "Cancel",
+      "delete_btn": "Delete crew",
+      "success_toast": "Crew deleted successfully!"
+    },
+    "leave_modal": {
+      "title": "Leave Crew",
+      "desc": "Are you sure you want to leave \"{{title}}\"? You will need an invite link to rejoin.",
+      "cancel_btn": "Cancel",
+      "leave_btn": "Leave crew",
+      "success_toast": "You left the crew"
+    },
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "page_info": "Page {{current}} of {{total}}"
+    }
+  },
+  "crew": {
+    "validation": {
+      "title_min": "Title must be at least 2 characters long",
+      "title_max": "Title cannot exceed 50 characters",
+      "title_trim": "Title cannot start or end with spaces",
+      "alias_max": "Alias cannot exceed 20 characters",
+      "alias_trim": "Alias cannot start or end with spaces"
+    }
+  },
+  "crew_page": {
+    "roles": {
+      "owner": "You are Owner",
+      "member": "You are Member"
+    },
+    "invite_btn": "Invite",
+    "back_to_home": "Back to Home",
+    "not_found_title": "Crew Not Found",
+    "not_found_desc": "The crew you are looking for does not exist or you do not have permission to view it.",
+    "error_title": "Failed to load crew",
+    "error_desc": "An error occurred while loading crew details.",
+    "tabs": {
+      "posts": "Posts",
+      "splits": "Splits",
+      "members": "Members"
+    },
+    "placeholders": {
+      "posts_title": "No posts yet",
+      "posts_desc": "Posts and photo dumps from your crew will appear here soon.",
+      "splits_title": "No splits yet",
+      "splits_desc": "Shared expenses and party bills will appear here.",
+      "members_title": "Crew Members",
+      "members_desc": "List of squad members and their roles."
+    },
+    "invite_modal": {
+      "title": "Invite to Crew",
+      "subtitle": "Share this QR code or link with friends to join your crew",
+      "qr_alt": "QR code for invite link",
+      "link_label": "Invitation link",
+      "copy_btn": "Copy",
+      "copied_btn": "Copied",
+      "copied_toast": "Invitation link copied to clipboard!",
+      "close_btn": "Close"
+    },
+    "members_list": {
+      "title": "Squad Members",
+      "subtitle": "People in this crew",
+      "owner_badge": "Owner",
+      "alias_label": "Alias",
+      "you_badge": "You",
+      "menu": {
+        "set_alias": "Set alias",
+        "edit_alias": "Edit alias",
+        "kick": "Remove from crew"
+      },
+      "alias_modal": {
+        "title": "Member Alias",
+        "subtitle": "Set a custom nickname for {{name}} in this crew",
+        "label": "Alias / Nickname",
+        "placeholder": "e.g. Maverick",
+        "helper": "Max 20 characters, leave empty to remove",
+        "cancel_btn": "Cancel",
+        "save_btn": "Save alias",
+        "success_toast": "Alias updated successfully!"
+      },
+      "kick_modal": {
+        "title": "Remove Member?",
+        "desc": "Are you sure you want to remove \"{{name}}\" from the crew?",
+        "cancel_btn": "Cancel",
+        "kick_btn": "Remove member",
+        "success_toast": "Member removed from the crew"
+      },
+      "loading": "Loading members...",
+      "error_title": "Failed to load members",
+      "error_desc": "An error occurred while fetching the members list.",
+      "empty_title": "No members found",
+      "empty_desc": "This crew currently has no members."
     }
   }
 }
