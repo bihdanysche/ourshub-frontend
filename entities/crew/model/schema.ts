@@ -32,3 +32,17 @@ export const updateMemberAliasSchema = z.object({
 });
 
 export type UpdateMemberAliasInput = z.infer<typeof updateMemberAliasSchema>;
+
+export const joinCrewSchema = z.object({
+  alias: z
+    .string()
+    .max(20, { message: "crew.validation.alias_max" })
+    .refine((val) => !val || val.trim() === val, {
+      message: "crew.validation.alias_trim",
+    })
+    .optional()
+    .or(z.literal("")),
+});
+
+export type JoinCrewInput = z.infer<typeof joinCrewSchema>;
+

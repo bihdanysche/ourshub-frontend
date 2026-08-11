@@ -15,9 +15,11 @@ export {
 export { crewKeys } from "./api/crew.keys";
 export {
   createCrewSchema,
+  joinCrewSchema,
   updateCrewSchema,
   updateMemberAliasSchema,
   type CreateCrewInput,
+  type JoinCrewInput,
   type UpdateCrewInput,
   type UpdateMemberAliasInput,
 } from "./model/schema";

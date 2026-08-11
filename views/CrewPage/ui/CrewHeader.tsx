@@ -126,14 +126,16 @@ export function CrewHeader({ crew }: CrewHeaderProps) {
         </div>
 
         <div className="flex items-center gap-2.5 self-start sm:self-auto pb-1">
-          <Button
-            variant="primary"
-            onPress={() => setIsInviteOpen(true)}
-            className="flex items-center gap-2 cursor-pointer shadow-xs hover:shadow-md transition-all"
-          >
-            <PersonPlus className="w-4 h-4" />
-            <span>{t("crew_page.invite_btn")}</span>
-          </Button>
+          {isOwner && (
+            <Button
+              variant="primary"
+              onPress={() => setIsInviteOpen(true)}
+              className="flex items-center gap-2 cursor-pointer shadow-xs hover:shadow-md transition-all"
+            >
+              <PersonPlus className="w-4 h-4" />
+              <span>{t("crew_page.invite_btn")}</span>
+            </Button>
+          )}
 
           <Dropdown>
             <DropdownTrigger className="w-9 h-9 flex items-center justify-center rounded-xl border border-border/60 bg-surface/40 hover:bg-surface-secondary text-foreground/70 hover:text-foreground transition-colors cursor-pointer outline-none focus:outline-none data-[hovered=true]:bg-surface-secondary">

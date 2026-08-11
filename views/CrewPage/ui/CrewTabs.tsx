@@ -2,7 +2,9 @@
 
 import { cn } from "@/shared/lib/utils";
 import { Comment, Persons, Receipt } from "@gravity-ui/icons";
+import { Tab, TabList, Tabs } from "@heroui/react";
 import { usePathname, useRouter } from "next/navigation";
+import { Key } from "react";
 import { useTranslation } from "react-i18next";
 
 interface CrewTabsProps {
@@ -39,36 +41,30 @@ export function CrewTabs({ crewId, membersCount }: CrewTabsProps) {
     },
   ];
 
-  const activeIndex = Math.max(
-    0,
-    tabs.findIndex((tab) => tab.id === activeTab),
-  );
+  const handleSelectionChange = (key: Key) => {
+    router.push(`/crews/${crewId}/${String(key)}`);
+  };
 
   return (
     <div className="w-full">
-      <div className="w-full p-1.5 rounded-2xl bg-surface/50 border border-border/60 backdrop-blur-md shadow-xs relative">
-        <div
-          className="absolute top-1.5 bottom-1.5 rounded-xl bg-accent shadow-xs transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-none"
-          style={{
-            width: "calc((100% - 12px) / 3)",
-            left: `calc(6px + ${activeIndex} * (100% - 12px) / 3)`,
-          }}
-        />
-
-        <div className="grid grid-cols-3 gap-1 relative z-10">
+      <Tabs
+        selectedKey={activeTab}
+        onSelectionChange={handleSelectionChange}
+        className="w-full"
+      >
+        <TabList className="w-full grid grid-cols-3 gap-1 p-1.5 rounded-2xl bg-surface/50 border border-border/60 backdrop-blur-md shadow-xs">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
 
             return (
-              <button
+              <Tab
                 key={tab.id}
-                type="button"
-                onClick={() => router.push(`/crews/${crewId}/${tab.id}`)}
+                id={tab.id}
                 className={cn(
-                  "flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-semibold transition-colors duration-200 cursor-pointer select-none",
+                  "flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-semibold transition-colors duration-200 cursor-pointer select-none outline-none focus:outline-none",
                   isActive
-                    ? "text-accent-foreground font-bold"
-                    : "text-foreground/70 hover:text-foreground",
+                    ? "bg-accent text-accent-foreground font-bold shadow-xs"
+                    : "text-foreground/70 hover:text-foreground hover:bg-surface-secondary/40",
                 )}
               >
                 {tab.icon}
@@ -85,11 +81,11 @@ export function CrewTabs({ crewId, membersCount }: CrewTabsProps) {
                     {tab.badge}
                   </span>
                 )}
-              </button>
+              </Tab>
             );
           })}
-        </div>
-      </div>
+        </TabList>
+      </Tabs>
     </div>
   );
 }

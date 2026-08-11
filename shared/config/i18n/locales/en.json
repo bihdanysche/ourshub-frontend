@@ -48,6 +48,9 @@
     "USERNAME_ALREADY_TAKEN": "This username is already taken",
     "TOKEN_EXPIRED": "Access token has expired",
     "CREW_NOT_FOUND": "Crew not found",
+    "POST_NOT_FOUND": "Post not found",
+    "ONLY_AUTHOR_CAN_EDIT_POST": "Only the author can edit this post",
+    "ONLY_AUTHOR_OR_OWNER_CAN_DELETE_POST": "Only the author or crew owner can delete this post",
     "MEMBER_NOT_FOUND": "Member not found",
     "INVITATION_NOT_FOUND": "Invitation link not found or expired",
     "ALREADY_MEMBER": "You are already a member of this crew",
@@ -59,6 +62,49 @@
     "CANNOT_EDIT_OTHER_MEMBER_ALIAS": "You cannot change the alias of other members",
     "CANNOT_LEAVE_AS_OWNER": "The owner cannot leave the crew, delete it instead",
     "UNKNOWN_ERROR": "Unknown error"
+  },
+  "posts": {
+    "create": {
+      "placeholder": "What's on your mind? Write a post...",
+      "submit_btn": "Publish",
+      "submitting_btn": "Publishing...",
+      "success_toast": "Post published successfully!"
+    },
+    "card": {
+      "edited": "edited",
+      "menu": {
+        "edit": "Edit post",
+        "delete": "Delete post"
+      }
+    },
+    "edit_modal": {
+      "title": "Edit Post",
+      "subtitle": "Update your post content",
+      "placeholder": "Edit post text...",
+      "cancel_btn": "Cancel",
+      "save_btn": "Save changes",
+      "success_toast": "Post updated successfully!"
+    },
+    "delete_modal": {
+      "title": "Delete Post",
+      "desc": "Are you sure you want to delete this post? This action cannot be undone.",
+      "cancel_btn": "Cancel",
+      "delete_btn": "Delete",
+      "success_toast": "Post deleted successfully!"
+    },
+    "empty": {
+      "title": "No posts yet",
+      "desc": "Be the first to share something with your squad!"
+    },
+    "loading": "Loading posts...",
+    "error_title": "Failed to load posts",
+    "error_desc": "An error occurred while fetching posts.",
+    "retry_btn": "Try again",
+    "validation": {
+      "content_min": "Post cannot be empty",
+      "content_max": "Post content cannot exceed 1500 characters",
+      "content_trim": "Post cannot start or end with spaces"
+    }
   },
   "auth": {
     "success_auth_desc": "You successfully logged in via Telegram!"
@@ -363,5 +409,31 @@
       "empty_title": "No members found",
       "empty_desc": "This crew currently has no members."
     }
+  },
+  "join_crew": {
+    "title": "Join Crew",
+    "subtitle": "You've been invited to join a squad",
+    "question": "Do you want to join this crew?",
+    "alias_label": "Your nickname in this crew (optional)",
+    "alias_placeholder": "e.g. Maverick",
+    "alias_helper": "Max 20 characters",
+    "join_btn": "Join Crew",
+    "cancel_btn": "No, take me home",
+    "login_required_title": "Authentication Required",
+    "login_required_desc": "To join this crew, please log in with your Telegram account first.",
+    "success_toast": "You have successfully joined the crew!",
+    "already_member_title": "Already a Member",
+    "already_member_desc": "You are already a member of this crew.",
+    "go_to_crew_btn": "Go to Crew",
+    "crew_full_title": "Crew is Full",
+    "crew_full_desc": "This crew has reached its maximum limit of 15 members and cannot accept new members.",
+    "not_found_title": "Invitation Not Found",
+    "not_found_desc": "This invitation link is invalid or has expired.",
+    "limit_reached_title": "Crews Limit Reached",
+    "limit_reached_desc": "You have reached the maximum limit of 10 crews. Please leave a crew before joining a new one.",
+    "error_title": "Failed to Load Invitation",
+    "error_desc": "An error occurred while loading this invitation.",
+    "retry_btn": "Try again",
+    "back_to_home": "Back to Home"
   }
 }

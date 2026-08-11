@@ -92,6 +92,7 @@ export function DeleteCrewModal({
                 <InputGroupInput
                   id="confirm-delete-input"
                   type="text"
+                  autoComplete="off"
                   value={confirmText}
                   onChange={(e) => setConfirmText(e.target.value)}
                   placeholder={t("home.delete_modal.confirm_placeholder")}

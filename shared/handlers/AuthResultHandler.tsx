@@ -42,8 +42,7 @@ export function AuthResultHandler() {
         indicator: <TriangleExclamationFill />,
       });
     }
-
-    router.replace("/");
+    router.replace(window.location.pathname);
   }, [params, router, queryClient, t, i18n]);
 
   return null;

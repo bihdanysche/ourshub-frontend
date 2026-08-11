@@ -39,14 +39,19 @@ export const useJoinCrew = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       invCode,
       ...data
-    }: JoinCrewDto & { invCode: string }) =>
-      apiClient.post<JoinCrewResponse>(
+    }: JoinCrewDto & { invCode: string }) => {
+      const res = await apiClient.post<JoinCrewResponse>(
         `/crews/invitations/${invCode}/join`,
         data,
-      ),
+      );
+      return (
+        (res as unknown as { data?: JoinCrewResponse })?.data ??
+        (res as unknown as JoinCrewResponse)
+      );
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: crewKeys.lists() });
     },

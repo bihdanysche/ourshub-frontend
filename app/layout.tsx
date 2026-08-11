@@ -15,7 +15,7 @@ const primaryFont = Geist({
 
 export const metadata: Metadata = {
   title: "Ours Hub",
-  description: "Hub for ours :)",
+  description: "For trust crews.",
 };
 
 export default function RootLayout({
