@@ -4,3 +4,5 @@ export { CrewTabs } from "./ui/CrewTabs";
 export { CrewPostsSection } from "./ui/sections/CrewPostsSection";
 export { CrewSplitsSection } from "./ui/sections/CrewSplitsSection";
 export { CrewMembersSection } from "./ui/sections/CrewMembersSection";
+export { CreateSplitView } from "./ui/CreateSplitView";
+export { SplitDetailView } from "./ui/SplitDetailView";

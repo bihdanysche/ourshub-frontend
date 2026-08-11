@@ -60,6 +60,7 @@ export interface GetCrewsQueryDto {
 export interface GetCrewMembersQueryDto {
   page?: number;
   limit?: number;
+  q?: string;
 }
 
 export interface CreateCrewDto {
