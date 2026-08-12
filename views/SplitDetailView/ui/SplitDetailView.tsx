@@ -6,8 +6,9 @@ import {
   SplitExpensesTab,
   SplitHeader,
   SplitHistoryTab,
+  SplitRequestsTab,
 } from "@/widgets/split-detail";
-import { ArrowRotateRight, Clock, Receipt, TriangleExclamationFill } from "@gravity-ui/icons";
+import { ArrowRotateRight, Clock, PaperPlane, Receipt, TriangleExclamationFill } from "@gravity-ui/icons";
 import { Button, Card, CardContent, Spinner, Tab, TabList, Tabs } from "@heroui/react";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -19,7 +20,9 @@ export function SplitDetailView() {
   const crewId = Number(params?.id);
   const splitId = Number(params?.splitId);
 
-  const [activeTab, setActiveTab] = useState<"expenses" | "history">("expenses");
+  const [activeTab, setActiveTab] = useState<
+    "expenses" | "history" | "requests"
+  >("expenses");
 
   const { data: split, isPending, isError, refetch } = useSplit(splitId);
 
@@ -34,6 +37,42 @@ export function SplitDetailView() {
     });
     return Array.from(map.values());
   }, [split]);
+
+  const tabs = useMemo(() => {
+    const list: Array<{
+      id: "expenses" | "history" | "requests";
+      label: string;
+      icon: React.ReactNode;
+      badge?: number;
+    }> = [
+      {
+        id: "expenses",
+        label: t("splits.tabs.expenses"),
+        icon: <Receipt className="w-4 h-4" />,
+      },
+      {
+        id: "history",
+        label: t("splits.tabs.history"),
+        icon: <Clock className="w-4 h-4" />,
+      },
+    ];
+
+    if (!split?.archived) {
+      list.push({
+        id: "requests",
+        label: t("splits.tabs.requests"),
+        icon: <PaperPlane className="w-4 h-4" />,
+        badge:
+          split?.requestsCount && split.requestsCount > 0
+            ? split.requestsCount
+            : undefined,
+      });
+    }
+
+    return list;
+  }, [split?.archived, split?.requestsCount, t]);
+
+  const currentTab = split?.archived && activeTab === "requests" ? "expenses" : activeTab;
 
   if (isPending) {
     return (
@@ -68,34 +107,25 @@ export function SplitDetailView() {
     );
   }
 
-  const tabs = [
-    {
-      id: "expenses",
-      label: t("splits.tabs.expenses"),
-      icon: <Receipt className="w-4 h-4" />,
-    },
-    {
-      id: "history",
-      label: t("splits.tabs.history"),
-      icon: <Clock className="w-4 h-4" />,
-    },
-  ];
-
   return (
-    <div className="flex flex-col gap-6 w-full animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
+    <div className="flex flex-col gap-6 w-full animate-page-slide-in-right">
       <SplitHeader split={split} />
 
       <div className="w-full">
         <Tabs
-          selectedKey={activeTab}
+          selectedKey={currentTab}
           onSelectionChange={(key) =>
-            setActiveTab(key as "expenses" | "history")
+            setActiveTab(key as "expenses" | "history" | "requests")
           }
           className="w-full"
         >
-          <TabList className="w-full grid grid-cols-2 gap-1 p-1.5 rounded-2xl bg-surface/50 border border-border/60 backdrop-blur-md shadow-xs">
+          <TabList
+            className={`w-full grid gap-1 p-1.5 rounded-2xl bg-surface/50 border border-border/60 backdrop-blur-md shadow-xs ${
+              split.archived ? "grid-cols-2" : "grid-cols-3"
+            }`}
+          >
             {tabs.map((tab) => {
-              const isActive = activeTab === tab.id;
+              const isActive = currentTab === tab.id;
 
               return (
                 <Tab
@@ -110,6 +140,18 @@ export function SplitDetailView() {
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
+                  {typeof tab.badge === "number" && tab.badge > 0 && (
+                    <span
+                      className={cn(
+                        "px-2 py-0.5 text-[10px] font-bold rounded-full transition-colors",
+                        isActive
+                          ? "bg-accent-foreground/20 text-accent-foreground"
+                          : "bg-accent text-accent-foreground",
+                      )}
+                    >
+                      {tab.badge}
+                    </span>
+                  )}
                 </Tab>
               );
             })}
@@ -117,11 +159,14 @@ export function SplitDetailView() {
         </Tabs>
       </div>
 
-      {activeTab === "expenses" && (
+      {currentTab === "expenses" && (
         <SplitExpensesTab split={split} crewId={crewId} />
       )}
-      {activeTab === "history" && (
+      {currentTab === "history" && (
         <SplitHistoryTab splitId={split.id} authors={authors} />
+      )}
+      {!split.archived && currentTab === "requests" && (
+        <SplitRequestsTab splitId={split.id} authors={authors} />
       )}
     </div>
   );

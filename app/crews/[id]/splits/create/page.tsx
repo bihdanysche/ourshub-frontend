@@ -1,3 +1,3 @@
-import { CreateSplitView } from "@/views/CrewPage";
+import { CreateSplitView } from "@/views/CreateSplitView";
 
 export default CreateSplitView;

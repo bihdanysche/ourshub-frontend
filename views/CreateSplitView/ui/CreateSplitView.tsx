@@ -12,7 +12,7 @@ export function CreateSplitView() {
   }
 
   return (
-    <div className="w-full animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
+    <div className="w-full animate-page-slide-in-right">
       <CreateSplitWizard crewId={crewId} />
     </div>
   );

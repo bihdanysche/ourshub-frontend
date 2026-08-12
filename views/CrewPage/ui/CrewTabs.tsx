@@ -10,9 +10,14 @@ import { useTranslation } from "react-i18next";
 interface CrewTabsProps {
   crewId: number;
   membersCount: number;
+  activeSplitsCount?: number;
 }
 
-export function CrewTabs({ crewId, membersCount }: CrewTabsProps) {
+export function CrewTabs({
+  crewId,
+  membersCount,
+  activeSplitsCount,
+}: CrewTabsProps) {
   const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
@@ -32,6 +37,10 @@ export function CrewTabs({ crewId, membersCount }: CrewTabsProps) {
       id: "splits",
       label: t("crew_page.tabs.splits"),
       icon: <Receipt className="w-4 h-4" />,
+      badge:
+        typeof activeSplitsCount === "number" && activeSplitsCount > 0
+          ? activeSplitsCount
+          : undefined,
     },
     {
       id: "members",

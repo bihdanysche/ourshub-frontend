@@ -28,6 +28,7 @@ export interface CrewDetail {
   avatar: string | null;
   cover: string | null;
   membersCount: number;
+  activeSplitsCount: number;
   role: CrewRole;
   inviteCode: string | null;
   createdAt: string;

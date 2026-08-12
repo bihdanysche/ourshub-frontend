@@ -39,18 +39,22 @@ export function CrewLayout({ children }: CrewLayoutProps) {
       <CrewHeader crew={crew} />
 
       {isSplitSubpage ? (
-        <div className="w-full flex items-center justify-start animate-in fade-in-0 slide-in-from-top-2 duration-300">
+        <div className="w-full flex items-center justify-start animate-page-slide-in-left">
           <Link
             href={`/crews/${crew.id}/splits`}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold border border-border/60 bg-surface/40 hover:bg-surface/70 text-foreground transition-all cursor-pointer shadow-xs active:scale-95"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold border border-border/60 bg-surface/40 hover:bg-surface/70 text-foreground transition-all cursor-pointer shadow-xs active:scale-95 hover:border-accent/40"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4 text-accent" />
             <span>{t("splits.back_to_splits")}</span>
           </Link>
         </div>
       ) : (
-        <div className="w-full animate-in fade-in-0 duration-300">
-          <CrewTabs crewId={crew.id} membersCount={crew.membersCount} />
+        <div className="w-full animate-page-slide-in-left">
+          <CrewTabs
+            crewId={crew.id}
+            membersCount={crew.membersCount}
+            activeSplitsCount={crew.activeSplitsCount}
+          />
         </div>
       )}
 

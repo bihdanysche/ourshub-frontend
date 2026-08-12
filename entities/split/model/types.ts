@@ -36,6 +36,7 @@ export interface SplitDetail {
   title: string;
   desc?: string;
   archived: boolean;
+  requestsCount: number;
   createdAt: string;
   expenses: SplitExpense[];
 }
@@ -52,7 +53,31 @@ export interface ExpensePayHistoryItem {
   amount: number;
   type: ExpenseHistoryType;
   msg?: string;
+  procByRequest: boolean;
   createdAt: string;
+}
+
+export type ExpenseRequestRoleFilter = "all" | "as_spender" | "as_user";
+
+export interface ExpenseRequestExpense {
+  id: number;
+  title: string;
+  spender: SplitUser;
+}
+
+export interface ExpenseRequestSplit {
+  id: number;
+  title: string;
+}
+
+export interface ExpenseRequestItem {
+  id: number;
+  amount: number;
+  msg: string | null;
+  createdAt: string;
+  user: SplitUser;
+  expense: ExpenseRequestExpense;
+  split: ExpenseRequestSplit;
 }
 
 export interface PaginationMeta {
@@ -80,6 +105,18 @@ export interface GetSplitHistoryQueryDto {
   limit?: number;
   q?: string;
   userId?: number;
+}
+
+export interface GetExpenseRequestsQueryDto {
+  page?: number;
+  limit?: number;
+  userId?: number;
+  role?: ExpenseRequestRoleFilter;
+}
+
+export interface CreateExpenseRequestDto {
+  amount: number;
+  msg?: string;
 }
 
 export interface CreateSplitMemberDto {

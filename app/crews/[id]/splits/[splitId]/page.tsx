@@ -1,3 +1,3 @@
-import { SplitDetailView } from "@/views/CrewPage";
+import { SplitDetailView } from "@/views/SplitDetailView";
 
 export default SplitDetailView;

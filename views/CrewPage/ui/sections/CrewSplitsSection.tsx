@@ -20,7 +20,7 @@ export function CrewSplitsSection() {
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
+    <div className="flex flex-col gap-6 w-full animate-page-slide-in-left">
       <div className="flex items-center justify-between gap-4 flex-wrap p-4 rounded-3xl border border-border/60 bg-surface/30 backdrop-blur-md">
         <Link
           href={`/crews/${crewId}/splits/create`}

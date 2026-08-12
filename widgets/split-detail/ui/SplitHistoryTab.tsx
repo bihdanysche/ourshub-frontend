@@ -145,6 +145,17 @@ export function SplitHistoryTab({ splitId, authors }: SplitHistoryTabProps) {
                               : t("splits.detail.history_increase_badge")}
                           </Chip>
 
+                          {item.procByRequest && (
+                            <Chip
+                              size="sm"
+                              variant="soft"
+                              color="accent"
+                              className="text-[9px] font-bold px-1.5 py-0"
+                            >
+                              {t("splits.detail.proc_by_request")}
+                            </Chip>
+                          )}
+
                           <span className="text-xs font-mono font-bold text-foreground">
                             {item.amount} ₴
                           </span>
@@ -171,9 +182,16 @@ export function SplitHistoryTab({ splitId, authors }: SplitHistoryTabProps) {
                   </div>
 
                   {item.msg && (
-                    <div className="flex items-start gap-2.5 p-3 rounded-xl bg-surface-secondary/50 border border-border/40 text-xs text-foreground/80">
-                      <Comment className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5" />
-                      <p className="italic font-medium leading-relaxed">
+                    <div className="flex flex-col gap-1 p-3 rounded-xl bg-surface-secondary/50 border border-border/40 text-xs text-foreground/80">
+                      <div className="flex items-center gap-2">
+                        <Comment className="w-3.5 h-3.5 text-accent shrink-0" />
+                        {item.procByRequest && (
+                          <span className="text-[10px] text-foreground/50 font-medium italic">
+                            ({t("splits.detail.proc_by_request")})
+                          </span>
+                        )}
+                      </div>
+                      <p className="italic font-medium leading-relaxed pl-5">
                         "{item.msg}"
                       </p>
                     </div>

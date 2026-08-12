@@ -2,6 +2,8 @@ import { apiClient } from "@/shared/api";
 import { useQuery } from "@tanstack/react-query";
 import {
   ExpensePayHistoryItem,
+  ExpenseRequestItem,
+  GetExpenseRequestsQueryDto,
   GetSplitHistoryQueryDto,
   GetSplitsQueryDto,
   PaginatedResponse,
@@ -56,6 +58,27 @@ export const useSplitHistory = (
         (res as unknown as {
           data?: PaginatedResponse<ExpensePayHistoryItem>;
         })?.data ?? (res as unknown as PaginatedResponse<ExpensePayHistoryItem>)
+      );
+    },
+    enabled: Boolean(splitId) && !isNaN(splitId),
+  });
+};
+
+export const useExpenseRequests = (
+  splitId: number,
+  query?: GetExpenseRequestsQueryDto,
+) => {
+  return useQuery<PaginatedResponse<ExpenseRequestItem>>({
+    queryKey: splitKeys.expenseRequestList(splitId, query),
+    queryFn: async () => {
+      const res = await apiClient.get<PaginatedResponse<ExpenseRequestItem>>(
+        `/splits/${splitId}/expense-requests`,
+        { params: query },
+      );
+      return (
+        (res as unknown as {
+          data?: PaginatedResponse<ExpenseRequestItem>;
+        })?.data ?? (res as unknown as PaginatedResponse<ExpenseRequestItem>)
       );
     },
     enabled: Boolean(splitId) && !isNaN(splitId),

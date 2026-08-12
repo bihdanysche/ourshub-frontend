@@ -114,7 +114,7 @@ export function SplitCard({ split, crewId }: SplitCardProps) {
                         </Avatar>
                       </Tooltip.Trigger>
                       <Tooltip.Content className="px-2.5 py-1 text-[11px] font-medium rounded-xl bg-background border border-border shadow-md">
-                        {displayName}
+                        {author.name}
                         {author.username ? ` (@${author.username})` : ""}
                       </Tooltip.Content>
                     </Tooltip>

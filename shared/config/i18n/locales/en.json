@@ -6,7 +6,8 @@
   "common": {
     "success": "Success!",
     "error": "Error",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "save_btn": "Save"
   },
   "time": {
     "just_now": "just now",
@@ -77,6 +78,10 @@
     "MAX_EXPENSES_REACHED": "Maximum number of expenses (10) reached",
     "CANNOT_REMOVE_SPENDER": "Cannot remove the expense spender from participants",
     "DUPLICATE_MEMBERS": "Duplicate members are not allowed",
+    "REQUEST_NOT_FOUND": "Expense request not found",
+    "REQUEST_AMOUNT_EXCEEDS_REMAINING_DEBT": "Request amount exceeds your remaining debt",
+    "ONLY_REQUEST_USER_CAN_CANCEL": "Only the request creator can cancel this request",
+    "CANNOT_REQUEST_OWN_EXPENSE": "You cannot create a request for an expense where you are the spender",
     "UNKNOWN_ERROR": "Unknown error"
   },
   "splits": {
@@ -133,7 +138,8 @@
     },
     "tabs": {
       "expenses": "Expenses",
-      "history": "History"
+      "history": "History",
+      "requests": "Requests"
     },
     "detail": {
       "archive_btn": "Archive split",
@@ -175,7 +181,24 @@
       "delete_expense_modal_desc": "Are you sure you want to delete this expense? This action cannot be undone.",
       "add_members_modal_title": "Add Members to Expense",
       "add_members_select_label": "Select crew members to add",
-      "add_members_submit": "Add members"
+      "add_members_submit": "Add members",
+      "proc_by_request": "Processed by request",
+      "create_request_btn": "Submit payment claim",
+      "create_request_modal_title": "Submit payment claim for {{title}}",
+      "create_request_submit": "Submit claim",
+      "requests_title": "Payment claims ({{count}})",
+      "filter_role_all": "All claims",
+      "filter_role_as_spender": "Received (I am Spender)",
+      "filter_role_as_user": "Sent by me",
+      "request_claim_text": "{{user}} claims to have paid {{amount}} ₴ for {{title}} (Spender: {{spender}})",
+      "you_claim_text": "You claim to have paid {{amount}} ₴ for {{title}} (Spender: {{spender}})",
+      "cancel_request_btn": "Cancel claim",
+      "accept_request_btn": "Accept",
+      "decline_request_btn": "Decline",
+      "empty_requests": "No active payment claims found",
+      "edit_split_modal_title": "Edit Split",
+      "edit_expense_modal_title": "Edit Expense",
+      "edit_btn": "Edit"
     },
     "validation": {
       "title_min": "Title must be at least 2 characters long",

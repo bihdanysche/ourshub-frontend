@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   AddExpenseDto,
   AddExpenseMembersDto,
+  CreateExpenseRequestDto,
   CreateSplitDto,
   IncreaseItemDto,
   PayOffItemDto,
@@ -156,6 +157,88 @@ export const useRemoveMembersFromExpense = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: splitKeys.detail(splitId) });
+      queryClient.invalidateQueries({ queryKey: splitKeys.lists() });
+    },
+  });
+};
+
+export const useCreateExpenseRequest = (
+  splitId: number,
+  expenseId: number,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: CreateExpenseRequestDto) => {
+      return apiClient.post<{ ok: true }>(
+        `/splits/${splitId}/${expenseId}/expense-request`,
+        data,
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: splitKeys.expenseRequests() });
+      queryClient.invalidateQueries({ queryKey: splitKeys.detail(splitId) });
+      queryClient.invalidateQueries({ queryKey: splitKeys.lists() });
+    },
+  });
+};
+
+export const useCancelExpenseRequest = (
+  splitId: number,
+  expenseId: number,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (requestId: number) => {
+      return apiClient.delete<{ ok: true }>(
+        `/splits/${splitId}/${expenseId}/${requestId}`,
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: splitKeys.expenseRequests() });
+      queryClient.invalidateQueries({ queryKey: splitKeys.detail(splitId) });
+      queryClient.invalidateQueries({ queryKey: splitKeys.lists() });
+    },
+  });
+};
+
+export const useDeclineExpenseRequest = (
+  splitId: number,
+  expenseId: number,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (requestId: number) => {
+      return apiClient.delete<{ ok: true }>(
+        `/splits/${splitId}/${expenseId}/${requestId}/decline`,
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: splitKeys.expenseRequests() });
+      queryClient.invalidateQueries({ queryKey: splitKeys.detail(splitId) });
+      queryClient.invalidateQueries({ queryKey: splitKeys.lists() });
+    },
+  });
+};
+
+export const useAcceptExpenseRequest = (
+  splitId: number,
+  expenseId: number,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (requestId: number) => {
+      return apiClient.post<{ ok: true }>(
+        `/splits/${splitId}/${expenseId}/${requestId}/accept`,
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: splitKeys.expenseRequests() });
+      queryClient.invalidateQueries({ queryKey: splitKeys.detail(splitId) });
+      queryClient.invalidateQueries({ queryKey: splitKeys.histories() });
       queryClient.invalidateQueries({ queryKey: splitKeys.lists() });
     },
   });

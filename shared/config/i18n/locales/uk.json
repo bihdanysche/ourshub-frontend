@@ -6,7 +6,8 @@
   "common": {
     "success": "Успіх!",
     "error": "Помилка",
-    "cancel": "Скасувати"
+    "cancel": "Скасувати",
+    "save_btn": "Зберегти"
   },
   "time": {
     "just_now": "щойно",
@@ -77,6 +78,10 @@
     "MAX_EXPENSES_REACHED": "Досягнуто максимальну кількість витрат (10)",
     "CANNOT_REMOVE_SPENDER": "Неможливо видалити того, хто платив, зі списку участников",
     "DUPLICATE_MEMBERS": "Дублювання учасників не дозволено",
+    "REQUEST_NOT_FOUND": "Запит про оплату не знайдено",
+    "REQUEST_AMOUNT_EXCEEDS_REMAINING_DEBT": "Сума запиту перевищує ваш залишок боргу",
+    "ONLY_REQUEST_USER_CAN_CANCEL": "Лише автор запиту може скасувати цей запит",
+    "CANNOT_REQUEST_OWN_EXPENSE": "Ви не можете створювати запит для витрати, де ви є тією людиною, хто платив",
     "UNKNOWN_ERROR": "Невідома помилка"
   },
   "splits": {
@@ -133,7 +138,8 @@
     },
     "tabs": {
       "expenses": "Витрати",
-      "history": "Історія"
+      "history": "Історія",
+      "requests": "Запити"
     },
     "detail": {
       "archive_btn": "Заархівувати спліт",
@@ -175,7 +181,24 @@
       "delete_expense_modal_desc": "Ви дійсно бажаєте видалити цю витрату? Цю дію неможливо скасувати.",
       "add_members_modal_title": "Додати учасників до витрати",
       "add_members_select_label": "Оберіть учасників банди для додавання",
-      "add_members_submit": "Додати учасників"
+      "add_members_submit": "Додати учасників",
+      "proc_by_request": "Оброблено за запитом",
+      "create_request_btn": "Подати заявку про оплату",
+      "create_request_modal_title": "Заявка про оплату для {{title}}",
+      "create_request_submit": "Надіслати заявку",
+      "requests_title": "Заявки про оплату ({{count}})",
+      "filter_role_all": "Усі заявки",
+      "filter_role_as_spender": "Отримані (Де я Spender)",
+      "filter_role_as_user": "Надіслані мною",
+      "request_claim_text": "{{user}} стверджує, що сплатив {{amount}} ₴ за {{title}} (Платив: {{spender}})",
+      "you_claim_text": "Ви стверджуєте, що сплатили {{amount}} ₴ за {{title}} (Платив: {{spender}})",
+      "cancel_request_btn": "Скасувати заявку",
+      "accept_request_btn": "Прийняти",
+      "decline_request_btn": "Відхилити",
+      "empty_requests": "Поки що немає активних заявок про оплату",
+      "edit_split_modal_title": "Редагувати спліт",
+      "edit_expense_modal_title": "Редагувати витрату",
+      "edit_btn": "Редагувати"
     },
     "validation": {
       "title_min": "Назва має містити щонайменше 2 символи",

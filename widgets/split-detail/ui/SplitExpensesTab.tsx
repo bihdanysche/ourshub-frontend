@@ -8,11 +8,13 @@ import {
 } from "@/entities/split";
 import {
   AddMemberModal,
+  CreateExpenseRequestModal,
+  EditExpenseModal,
   IncreaseDebtModal,
   PayOffModal,
 } from "@/features/manage-split-expense";
 import { toastApiError } from "@/shared/lib/notify-api-error";
-import { Check, PersonPlus, Plus, Receipt, TrashBin } from "@gravity-ui/icons";
+import { Check, PaperPlane, Pencil, PersonPlus, Plus, Receipt, TrashBin } from "@gravity-ui/icons";
 import {
   Avatar,
   AvatarFallback,
@@ -55,6 +57,18 @@ interface AddMemberTarget {
   existingUserIds: number[];
 }
 
+interface CreateRequestTarget {
+  expenseId: number;
+  expenseTitle: string;
+  maxAmount: number;
+}
+
+interface EditExpenseTarget {
+  expenseId: number;
+  title: string;
+  desc?: string;
+}
+
 const getInitials = (name: string): string => {
   const parts = name.trim().split(/\s+/);
   if (parts.length === 0 || !parts[0]) return "U";
@@ -70,6 +84,10 @@ export function SplitExpensesTab({ split, crewId }: SplitExpensesTabProps) {
   const [payOffTarget, setPayOffTarget] = useState<PayOffTarget | null>(null);
   const [increaseTarget, setIncreaseTarget] = useState<IncreaseTarget | null>(null);
   const [addMemberTarget, setAddMemberTarget] = useState<AddMemberTarget | null>(null);
+  const [createRequestTarget, setCreateRequestTarget] =
+    useState<CreateRequestTarget | null>(null);
+  const [editExpenseTarget, setEditExpenseTarget] =
+    useState<EditExpenseTarget | null>(null);
 
   return (
     <div className="flex flex-col gap-6 w-full animate-in fade-in-0 duration-300">
@@ -77,6 +95,13 @@ export function SplitExpensesTab({ split, crewId }: SplitExpensesTabProps) {
         {split.expenses.map((exp, index) => {
           const spenderName = exp.spender.alias || exp.spender.name;
           const isSpender = currentUserId === exp.spender.id;
+
+          const currentUserMember = exp.members?.find(
+            (m) => m.user.id === currentUserId,
+          );
+          const userRemainingDebt = currentUserMember
+            ? Math.max(0, currentUserMember.mustPay - currentUserMember.paid)
+            : 0;
 
           const expTotalPaid = exp.members?.reduce((acc, m) => acc + m.paid, 0) || 0;
           const expTotalMustPay =
@@ -99,6 +124,8 @@ export function SplitExpensesTab({ split, crewId }: SplitExpensesTabProps) {
               index={index}
               spenderName={spenderName}
               isSpender={isSpender}
+              currentUserId={currentUserId}
+              userRemainingDebt={userRemainingDebt}
               isSplitArchived={split.archived}
               expTotalPaid={expTotalPaid}
               expTotalMustPay={expTotalMustPay}
@@ -109,6 +136,20 @@ export function SplitExpensesTab({ split, crewId }: SplitExpensesTabProps) {
                 setAddMemberTarget({
                   expenseId: exp.id,
                   existingUserIds: exp.members.map((m) => m.user.id),
+                })
+              }
+              onOpenCreateRequest={() =>
+                setCreateRequestTarget({
+                  expenseId: exp.id,
+                  expenseTitle: exp.title,
+                  maxAmount: userRemainingDebt,
+                })
+              }
+              onOpenEditExpense={() =>
+                setEditExpenseTarget({
+                  expenseId: exp.id,
+                  title: exp.title,
+                  desc: exp.desc,
                 })
               }
             />
@@ -146,6 +187,28 @@ export function SplitExpensesTab({ split, crewId }: SplitExpensesTabProps) {
           onClose={() => setAddMemberTarget(null)}
         />
       )}
+
+      {createRequestTarget && (
+        <CreateExpenseRequestModal
+          splitId={split.id}
+          expenseId={createRequestTarget.expenseId}
+          expenseTitle={createRequestTarget.expenseTitle}
+          maxAmount={createRequestTarget.maxAmount}
+          isOpen={Boolean(createRequestTarget)}
+          onClose={() => setCreateRequestTarget(null)}
+        />
+      )}
+
+      {editExpenseTarget && (
+        <EditExpenseModal
+          splitId={split.id}
+          expenseId={editExpenseTarget.expenseId}
+          currentTitle={editExpenseTarget.title}
+          currentDesc={editExpenseTarget.desc}
+          isOpen={Boolean(editExpenseTarget)}
+          onClose={() => setEditExpenseTarget(null)}
+        />
+      )}
     </div>
   );
 }
@@ -157,6 +220,8 @@ interface ExpenseCardItemProps {
   index: number;
   spenderName: string;
   isSpender: boolean;
+  currentUserId?: number;
+  userRemainingDebt: number;
   isSplitArchived: boolean;
   expTotalPaid: number;
   expTotalMustPay: number;
@@ -164,6 +229,8 @@ interface ExpenseCardItemProps {
   onOpenPayOff: (target: PayOffTarget) => void;
   onOpenIncrease: (target: IncreaseTarget) => void;
   onOpenAddMember: () => void;
+  onOpenCreateRequest: () => void;
+  onOpenEditExpense: () => void;
 }
 
 function ExpenseCardItem({
@@ -172,6 +239,7 @@ function ExpenseCardItem({
   index,
   spenderName,
   isSpender,
+  currentUserId,
   isSplitArchived,
   expTotalPaid,
   expTotalMustPay,
@@ -179,6 +247,8 @@ function ExpenseCardItem({
   onOpenPayOff,
   onOpenIncrease,
   onOpenAddMember,
+  onOpenCreateRequest,
+  onOpenEditExpense,
 }: ExpenseCardItemProps) {
   const { t } = useTranslation();
   const { mutate: removeMembers, isPending: isRemoving } =
@@ -264,6 +334,16 @@ function ExpenseCardItem({
                 <Button
                   variant="outline"
                   size="sm"
+                  onPress={onOpenEditExpense}
+                  className="flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
+                >
+                  <Pencil className="w-4 h-4" />
+                  <span>{t("splits.detail.edit_btn")}</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
                   onPress={onOpenAddMember}
                   className="flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
                 >
@@ -315,6 +395,7 @@ function ExpenseCardItem({
             {exp.members.map((m, mIndex) => {
               const memberName = m.user.alias || m.user.name;
               const isExpenseSpenderMember = m.user.id === exp.spender.id;
+              const isMe = m.user.id === currentUserId;
               const remainingDebt = Math.max(0, m.mustPay - m.paid);
               const isSettled = remainingDebt === 0;
 
@@ -346,6 +427,16 @@ function ExpenseCardItem({
                             {t("splits.wizard.spender_badge")}
                           </Chip>
                         )}
+                        {isMe && !isExpenseSpenderMember && (
+                          <Chip
+                            size="sm"
+                            variant="soft"
+                            color="accent"
+                            className="text-[9px] font-bold px-1.5 py-0"
+                          >
+                            {t("splits.wizard.you_badge")}
+                          </Chip>
+                        )}
                       </div>
                       {m.user.username && (
                         <span className="text-[10px] text-foreground/40 font-mono truncate">
@@ -356,6 +447,18 @@ function ExpenseCardItem({
                   </div>
 
                   <div className="flex items-center gap-3 shrink-0">
+                    {isMe && !isSpender && !isSplitArchived && !isSettled && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onPress={onOpenCreateRequest}
+                        className="flex items-center gap-1.5 text-[11px] font-semibold text-accent border-accent/40 hover:bg-accent/10 cursor-pointer py-1 px-2.5 h-7"
+                      >
+                        <PaperPlane className="w-3.5 h-3.5" />
+                        <span>{t("splits.detail.create_request_btn")}</span>
+                      </Button>
+                    )}
+
                     <div className="flex flex-col items-end gap-0.5">
                       <span className="font-mono font-bold text-foreground">
                         {m.paid} / {m.mustPay} ₴

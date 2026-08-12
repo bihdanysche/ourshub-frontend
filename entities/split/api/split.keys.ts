@@ -1,4 +1,8 @@
-import { GetSplitHistoryQueryDto, GetSplitsQueryDto } from "../model/types";
+import {
+  GetExpenseRequestsQueryDto,
+  GetSplitHistoryQueryDto,
+  GetSplitsQueryDto,
+} from "../model/types";
 
 export const splitKeys = {
   all: ["splits"] as const,
@@ -10,4 +14,7 @@ export const splitKeys = {
   histories: () => [...splitKeys.all, "history"] as const,
   history: (splitId: number, query?: GetSplitHistoryQueryDto) =>
     [...splitKeys.histories(), splitId, query ?? {}] as const,
+  expenseRequests: () => [...splitKeys.all, "requests"] as const,
+  expenseRequestList: (splitId: number, query?: GetExpenseRequestsQueryDto) =>
+    [...splitKeys.expenseRequests(), splitId, query ?? {}] as const,
 };
