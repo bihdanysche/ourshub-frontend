@@ -171,17 +171,17 @@ export function MyProfileSection() {
       </div>
 
       {user && (
-        <div className="flex items-center gap-4 p-4 sm:p-5 rounded-2xl border border-border/60 bg-surface/40 shadow-xs flex-wrap sm:flex-nowrap">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 sm:p-5 rounded-2xl border border-border/60 bg-surface/40 shadow-xs">
           <Avatar size="lg" color="accent" className="w-16 h-16 text-base shrink-0 rounded-full">
             {user.avatar && <AvatarImage src={getAvatarUrl(user.avatar)} alt={user.name} className="rounded-full" />}
             <AvatarFallback className="rounded-full">{getInitials(user.name)}</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col min-w-0 flex-1">
+          <div className="flex flex-col min-w-0 flex-1 w-full">
             <p className="text-sm font-semibold text-foreground truncate">
               {t("settings.profile.avatar_title")}
             </p>
 
-            <div className="flex items-center gap-2 mt-2 flex-wrap">
+            <div className="flex items-center gap-2 mt-2 flex-wrap w-full sm:w-auto">
               <input
                 ref={fileInputRef}
                 type="file"

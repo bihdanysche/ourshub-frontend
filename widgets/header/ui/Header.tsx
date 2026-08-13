@@ -7,7 +7,7 @@ import { UserMenu } from "./UserMenu";
 export default function Header() {
   return (
     <header className="border-overlay bg-default sticky top-0 z-50 border">
-      <div className="mx-auto flex w-(--page-width) items-center justify-between py-5">
+      <div className="mx-auto flex w-full max-w-(--page-width) items-center justify-between px-4 sm:px-6 py-4">
         <Link
           href="/"
           className="relative flex cursor-pointer flex-row items-center justify-center gap-3 active:top-px"

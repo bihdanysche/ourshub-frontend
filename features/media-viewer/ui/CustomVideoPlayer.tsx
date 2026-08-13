@@ -124,6 +124,7 @@ export function CustomVideoPlayer({ src, name }: CustomVideoPlayerProps) {
       <video
         ref={videoRef}
         src={mediaUrl}
+        preload="metadata"
         onClick={togglePlay}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}

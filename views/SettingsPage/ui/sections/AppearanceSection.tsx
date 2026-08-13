@@ -8,6 +8,7 @@ import {
   DropdownPopover,
   DropdownTrigger,
 } from "@heroui/react";
+import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -51,7 +52,7 @@ export function AppearanceSection() {
           </div>
 
           <Dropdown>
-            <DropdownTrigger className="group flex items-center justify-between gap-3 px-3.5 py-2 rounded-xl bg-surface/80 hover:bg-surface-secondary border border-border/80 hover:border-accent/50 transition-all duration-200 cursor-pointer shadow-xs min-w-[150px] outline-none focus-visible:ring-2 focus-visible:ring-focus">
+            <DropdownTrigger className="group flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-surface/80 hover:bg-surface-secondary border border-border/80 hover:border-accent/50 transition-all duration-200 cursor-pointer shadow-xs w-full sm:w-auto sm:min-w-[160px] outline-none focus-visible:ring-2 focus-visible:ring-focus">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-foreground">
                   {currentLang === "en"
@@ -116,7 +117,7 @@ export function AppearanceSection() {
           </div>
 
           <Dropdown>
-            <DropdownTrigger className="group flex items-center justify-between gap-3 px-3.5 py-2 rounded-xl bg-surface/80 hover:bg-surface-secondary border border-border/80 hover:border-accent/50 transition-all duration-200 cursor-pointer shadow-xs min-w-[150px] outline-none focus-visible:ring-2 focus-visible:ring-focus">
+            <DropdownTrigger className="group flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-surface/80 hover:bg-surface-secondary border border-border/80 hover:border-accent/50 transition-all duration-200 cursor-pointer shadow-xs w-full sm:w-auto sm:min-w-[160px] outline-none focus-visible:ring-2 focus-visible:ring-focus">
               <div className="flex items-center gap-2">
                 {currentTheme === "dark" ? (
                   <Moon className="w-4 h-4 text-foreground/70" />

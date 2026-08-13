@@ -27,7 +27,7 @@ export function OtherSessionsBlock({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
         <div className="flex items-center gap-2">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-muted select-none">
             {t("settings.sessions.other_title")}

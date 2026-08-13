@@ -86,7 +86,6 @@ export function EditPostModal({
   if (currentPostId !== prevPostId) {
     setPrevPostId(currentPostId);
     setNewFiles([]);
-    setNewFilePreviews([]);
   }
 
   useEffect(() => {

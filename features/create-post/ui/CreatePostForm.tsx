@@ -12,7 +12,7 @@ import { Button, Card, CardContent, Spinner, TextArea, toast } from "@heroui/rea
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 interface CreatePostFormProps {

@@ -81,7 +81,7 @@ export function SessionItemCard({
         </div>
       </div>
 
-      <div className="flex items-center self-end sm:self-center shrink-0">
+      <div className="flex items-center self-start sm:self-center shrink-0 mt-1 sm:mt-0">
         {session.isCurrent ? (
           <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-success/10 border border-success/20 text-success text-xs font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />

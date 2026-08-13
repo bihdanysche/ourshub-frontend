@@ -46,7 +46,7 @@ export function PayOffModal({
 
   const [amount, setAmount] = useState("");
   const [msg, setMsg] = useState("");
-  const [prevMemberId, setPrevMemberId] = useState<string | null>(null);
+  const [prevMemberId, setPrevMemberId] = useState<number | null>(null);
 
   const currentMemberId = member?.userId ?? null;
   if (currentMemberId !== prevMemberId) {
