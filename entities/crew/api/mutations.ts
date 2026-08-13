@@ -115,3 +115,71 @@ export const useDeleteCrew = () => {
     },
   });
 };
+
+export const useUploadCrewAvatar = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ crewId, file }: { crewId: number; file: File }) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      return apiClient.post<ApiResponseOk>(`/crews/${crewId}/avatar`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    onSuccess: (_, { crewId }) => {
+      queryClient.invalidateQueries({ queryKey: crewKeys.detail(crewId) });
+      queryClient.invalidateQueries({ queryKey: crewKeys.lists() });
+    },
+  });
+};
+
+export const useDeleteCrewAvatar = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (crewId: number) =>
+      apiClient.delete<ApiResponseOk>(`/crews/${crewId}/avatar`),
+    onSuccess: (_, crewId) => {
+      queryClient.invalidateQueries({ queryKey: crewKeys.detail(crewId) });
+      queryClient.invalidateQueries({ queryKey: crewKeys.lists() });
+    },
+  });
+};
+
+export const useUploadCrewCover = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ crewId, file }: { crewId: number; file: File }) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      return apiClient.post<ApiResponseOk>(`/crews/${crewId}/cover`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    onSuccess: (_, { crewId }) => {
+      queryClient.invalidateQueries({ queryKey: crewKeys.detail(crewId) });
+      queryClient.invalidateQueries({ queryKey: crewKeys.lists() });
+    },
+  });
+};
+
+export const useDeleteCrewCover = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (crewId: number) =>
+      apiClient.delete<ApiResponseOk>(`/crews/${crewId}/cover`),
+    onSuccess: (_, crewId) => {
+      queryClient.invalidateQueries({ queryKey: crewKeys.detail(crewId) });
+      queryClient.invalidateQueries({ queryKey: crewKeys.lists() });
+    },
+  });
+};

@@ -1,7 +1,9 @@
 "use client";
 
 import { PostItem } from "@/entities/post";
+import { MediaAttachmentsGrid } from "@/features/media-viewer/ui/MediaAttachmentsGrid";
 import { formatRelativeTime } from "@/shared/lib/format-relative-time";
+import { getAvatarUrl } from "@/shared/lib";
 import { Ellipsis, Pencil, TrashBin } from "@gravity-ui/icons";
 import {
   Avatar,
@@ -67,10 +69,10 @@ export function CrewPostCard({
             <Avatar
               size="md"
               color="accent"
-              className="w-11 h-11 rounded-2xl ring-2 ring-border/40 group-hover:ring-accent/40 transition-all shrink-0"
+              className="w-11 h-11 rounded-full ring-2 ring-border/40 group-hover:ring-accent/40 transition-all shrink-0"
             >
               {post.author.avatar && (
-                <AvatarImage src={post.author.avatar} alt={authorDisplayName} />
+                <AvatarImage src={getAvatarUrl(post.author.avatar)} alt={authorDisplayName} />
               )}
               <AvatarFallback className="font-bold text-sm text-accent-foreground bg-accent/20">
                 {getInitials(authorDisplayName)}
@@ -160,6 +162,10 @@ export function CrewPostCard({
             {post.content}
           </p>
         </ScrollShadow>
+
+        {post.attachments && post.attachments.length > 0 && (
+          <MediaAttachmentsGrid attachments={post.attachments} />
+        )}
       </CardContent>
     </Card>
   );

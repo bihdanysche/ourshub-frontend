@@ -1,13 +1,24 @@
 "use client";
 
-import { CrewDetail } from "@/entities/crew";
+import {
+  CrewDetail,
+  useDeleteCrewAvatar,
+  useDeleteCrewCover,
+  useUploadCrewAvatar,
+  useUploadCrewCover,
+} from "@/entities/crew";
 import { DeleteCrewModal } from "@/features/delete-crew";
 import { EditCrewModal } from "@/features/edit-crew";
 import { InviteCrewModal } from "@/features/invite-crew";
 import { LeaveCrewModal } from "@/features/leave-crew";
-import { cn } from "@/shared/lib/utils";
+import { cn, getAvatarUrl } from "@/shared/lib";
+import { toastApiError } from "@/shared/lib/notify-api-error";
+import { ImageCropModal } from "@/shared/ui/ImageCropModal";
 import {
   ArrowRightFromSquare,
+  ArrowUpFromLine,
+  Camera,
+  Delete,
   Ellipsis,
   Pencil,
   Person,
@@ -26,10 +37,19 @@ import {
   DropdownMenu,
   DropdownPopover,
   DropdownTrigger,
+  ModalBackdrop,
+  ModalBody,
+  ModalContainer,
+  ModalDialog,
+  ModalFooter,
+  ModalHeader,
+  ModalHeading,
+  Spinner,
+  toast,
 } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface CrewHeaderProps {
@@ -51,6 +71,23 @@ export function CrewHeader({ crew }: CrewHeaderProps) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
+
+  const [isDeleteAvatarOpen, setIsDeleteAvatarOpen] = useState(false);
+  const [isDeleteCoverOpen, setIsDeleteCoverOpen] = useState(false);
+
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
+  const coverInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [selectedCrop, setSelectedCrop] = useState<{
+    src: string;
+    type: "avatar" | "cover";
+  } | null>(null);
+
+  const { mutate: uploadAvatar, isPending: isUploadingAvatar } = useUploadCrewAvatar();
+  const { mutate: deleteAvatar, isPending: isDeletingAvatar } = useDeleteCrewAvatar();
+
+  const { mutate: uploadCover, isPending: isUploadingCover } = useUploadCrewCover();
+  const { mutate: deleteCover, isPending: isDeletingCover } = useDeleteCrewCover();
 
   const isOwner = crew.role === "OWNER";
   const roleBadge = isOwner
@@ -75,12 +112,85 @@ export function CrewHeader({ crew }: CrewHeaderProps) {
     }
   };
 
+  const handleFileSelect = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "avatar" | "cover",
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSelectedCrop({ src: reader.result as string, type });
+    };
+    reader.readAsDataURL(file);
+
+    e.target.value = "";
+  };
+
+  const handleCropComplete = (croppedFile: File) => {
+    if (!selectedCrop) return;
+
+    if (selectedCrop.type === "avatar") {
+      uploadAvatar(
+        { crewId: crew.id, file: croppedFile },
+        {
+          onSuccess: () => {
+            toast.success(t("common.success"));
+            setSelectedCrop(null);
+          },
+          onError: (err) => {
+            toastApiError(err);
+          },
+        },
+      );
+    } else {
+      uploadCover(
+        { crewId: crew.id, file: croppedFile },
+        {
+          onSuccess: () => {
+            toast.success(t("common.success"));
+            setSelectedCrop(null);
+          },
+          onError: (err) => {
+            toastApiError(err);
+          },
+        },
+      );
+    }
+  };
+
+  const handleDeleteAvatar = () => {
+    deleteAvatar(crew.id, {
+      onSuccess: () => {
+        toast.success(t("common.success"));
+        setIsDeleteAvatarOpen(false);
+      },
+      onError: (err) => {
+        toastApiError(err);
+      },
+    });
+  };
+
+  const handleDeleteCover = () => {
+    deleteCover(crew.id, {
+      onSuccess: () => {
+        toast.success(t("common.success"));
+        setIsDeleteCoverOpen(false);
+      },
+      onError: (err) => {
+        toastApiError(err);
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="relative h-44 sm:h-52 md:h-60 w-full rounded-3xl overflow-hidden border border-border/60 bg-gradient-to-br from-accent/20 via-surface-secondary/70 to-accent/10 shadow-xs">
+      {/* Cover Container */}
+      <div className="relative w-full aspect-[3/1] max-h-72 sm:max-h-80 rounded-3xl overflow-hidden border border-border/60 bg-gradient-to-br from-accent/20 via-surface-secondary/70 to-accent/10 shadow-xs group">
         {crew.cover ? (
           <Image
-            src={crew.cover}
+            src={getAvatarUrl(crew.cover)!}
             alt={crew.title}
             fill
             unoptimized
@@ -92,20 +202,109 @@ export function CrewHeader({ crew }: CrewHeaderProps) {
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent pointer-events-none" />
+
+        {isOwner && (
+          <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
+            <input
+              ref={coverInputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/jpg,image/heic"
+              className="hidden"
+              onChange={(e) => handleFileSelect(e, "cover")}
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              isDisabled={isUploadingCover || isDeletingCover}
+              onPress={() => coverInputRef.current?.click()}
+              className="bg-background/80 backdrop-blur-md hover:bg-background text-foreground text-xs font-semibold flex items-center gap-1.5 border-border/60 cursor-pointer shadow-md"
+            >
+              {isUploadingCover ? (
+                <Spinner size="sm" color="current" />
+              ) : (
+                <ArrowUpFromLine className="w-3.5 h-3.5" />
+              )}
+              <span className="hidden sm:inline">{t("crew_page.upload_cover_btn")}</span>
+            </Button>
+
+            {crew.cover && (
+              <Button
+                variant="danger-soft"
+                size="sm"
+                isDisabled={isUploadingCover || isDeletingCover}
+                onPress={() => setIsDeleteCoverOpen(true)}
+                className="bg-danger/20 hover:bg-danger/30 text-danger border border-danger/30 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-md backdrop-blur-md"
+              >
+                {isDeletingCover ? (
+                  <Spinner size="sm" color="current" />
+                ) : (
+                  <Delete className="w-3.5 h-3.5" />
+                )}
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
+      {/* Header Info */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 px-2 sm:px-4 -mt-16 sm:-mt-20 relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-          <Avatar
-            size="lg"
-            color="accent"
-            className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl ring-4 ring-background shadow-xl shrink-0"
-          >
-            {crew.avatar && <AvatarImage src={crew.avatar} alt={crew.title} />}
-            <AvatarFallback className="font-bold text-2xl text-accent-foreground bg-accent/20">
-              {getInitials(crew.title)}
-            </AvatarFallback>
-          </Avatar>
+          <div className="relative group/avatar">
+            <Avatar
+              size="lg"
+              color="accent"
+              className="w-24 h-24 sm:w-28 sm:h-28 rounded-full ring-4 ring-background shadow-xl shrink-0"
+            >
+              {crew.avatar && (
+                <AvatarImage src={getAvatarUrl(crew.avatar)} alt={crew.title} />
+              )}
+              <AvatarFallback className="font-bold text-2xl text-accent-foreground bg-accent/20">
+                {getInitials(crew.title)}
+              </AvatarFallback>
+            </Avatar>
+
+            {isOwner && (
+              <>
+                <input
+                  ref={avatarInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/jpg,image/heic"
+                  className="hidden"
+                  onChange={(e) => handleFileSelect(e, "avatar")}
+                />
+                <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover/avatar:opacity-100 transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer z-20">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    isDisabled={isUploadingAvatar || isDeletingAvatar}
+                    onPress={() => avatarInputRef.current?.click()}
+                    className="p-1.5 h-8 w-8 min-w-0 rounded-full bg-background/80 hover:bg-background text-foreground cursor-pointer"
+                  >
+                    {isUploadingAvatar ? (
+                      <Spinner size="sm" color="current" />
+                    ) : (
+                      <Camera className="w-4 h-4" />
+                    )}
+                  </Button>
+                  {crew.avatar && (
+                    <Button
+                      variant="danger-soft"
+                      size="sm"
+                      isDisabled={isUploadingAvatar || isDeletingAvatar}
+                      onPress={() => setIsDeleteAvatarOpen(true)}
+                      className="p-1.5 h-8 w-8 min-w-0 rounded-full bg-danger/80 hover:bg-danger text-white cursor-pointer"
+                    >
+                      {isDeletingAvatar ? (
+                        <Spinner size="sm" color="current" />
+                      ) : (
+                        <Delete className="w-4 h-4" />
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
 
           <div className="flex flex-col gap-1.5 pb-1">
             <div className="flex items-center gap-3 flex-wrap">
@@ -183,6 +382,126 @@ export function CrewHeader({ crew }: CrewHeaderProps) {
           </Dropdown>
         </div>
       </div>
+
+      {selectedCrop && (
+        <ImageCropModal
+          imageSrc={selectedCrop.src}
+          isOpen={Boolean(selectedCrop)}
+          onClose={() => setSelectedCrop(null)}
+          onCropComplete={handleCropComplete}
+          aspectRatio={selectedCrop.type === "cover" ? 3 : 1}
+          cropShape={selectedCrop.type === "cover" ? "rect" : "round"}
+          title={
+            selectedCrop.type === "cover"
+              ? t("crew_page.crop_cover_title")
+              : t("crew_page.crop_avatar_title")
+          }
+        />
+      )}
+
+      {isDeleteAvatarOpen && (
+        <ModalBackdrop
+          isOpen={isDeleteAvatarOpen}
+          onOpenChange={(open) => {
+            if (!open && !isDeletingAvatar) setIsDeleteAvatarOpen(false);
+          }}
+          isDismissable={!isDeletingAvatar}
+          isKeyboardDismissDisabled={isDeletingAvatar}
+        >
+          <ModalContainer placement="center" size="sm">
+            <ModalDialog className="border border-border/60 bg-background/95 backdrop-blur-xl">
+              <ModalHeader className="flex flex-col gap-1">
+                <ModalHeading className="text-base font-bold text-foreground">
+                  {t("crew_page.delete_avatar_btn")}
+                </ModalHeading>
+              </ModalHeader>
+
+              <ModalBody className="py-2">
+                <p className="text-sm text-foreground/80">
+                  {t("crew_page.delete_avatar_confirm")}
+                </p>
+              </ModalBody>
+
+              <ModalFooter className="flex justify-end gap-3 pt-4">
+                <Button
+                  variant="outline"
+                  type="button"
+                  isDisabled={isDeletingAvatar}
+                  onPress={() => setIsDeleteAvatarOpen(false)}
+                >
+                  {t("common.cancel")}
+                </Button>
+                <Button
+                  variant="danger"
+                  type="button"
+                  isDisabled={isDeletingAvatar}
+                  onPress={handleDeleteAvatar}
+                  className="flex items-center gap-2"
+                >
+                  {isDeletingAvatar ? (
+                    <Spinner size="sm" color="current" />
+                  ) : (
+                    <Delete className="w-4 h-4" />
+                  )}
+                  <span>{t("crew_page.delete_avatar_btn")}</span>
+                </Button>
+              </ModalFooter>
+            </ModalDialog>
+          </ModalContainer>
+        </ModalBackdrop>
+      )}
+
+      {isDeleteCoverOpen && (
+        <ModalBackdrop
+          isOpen={isDeleteCoverOpen}
+          onOpenChange={(open) => {
+            if (!open && !isDeletingCover) setIsDeleteCoverOpen(false);
+          }}
+          isDismissable={!isDeletingCover}
+          isKeyboardDismissDisabled={isDeletingCover}
+        >
+          <ModalContainer placement="center" size="sm">
+            <ModalDialog className="border border-border/60 bg-background/95 backdrop-blur-xl">
+              <ModalHeader className="flex flex-col gap-1">
+                <ModalHeading className="text-base font-bold text-foreground">
+                  {t("crew_page.delete_cover_btn")}
+                </ModalHeading>
+              </ModalHeader>
+
+              <ModalBody className="py-2">
+                <p className="text-sm text-foreground/80">
+                  {t("crew_page.delete_cover_confirm")}
+                </p>
+              </ModalBody>
+
+              <ModalFooter className="flex justify-end gap-3 pt-4">
+                <Button
+                  variant="outline"
+                  type="button"
+                  isDisabled={isDeletingCover}
+                  onPress={() => setIsDeleteCoverOpen(false)}
+                >
+                  {t("common.cancel")}
+                </Button>
+                <Button
+                  variant="danger"
+                  type="button"
+                  isDisabled={isDeletingCover}
+                  onPress={handleDeleteCover}
+                  className="flex items-center gap-2"
+                >
+                  {isDeletingCover ? (
+                    <Spinner size="sm" color="current" />
+                  ) : (
+                    <Delete className="w-4 h-4" />
+                  )}
+                  <span>{t("crew_page.delete_cover_btn")}</span>
+                </Button>
+              </ModalFooter>
+            </ModalDialog>
+          </ModalContainer>
+        </ModalBackdrop>
+      )}
 
       <InviteCrewModal
         isOpen={isInviteOpen}

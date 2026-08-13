@@ -2,6 +2,7 @@
 
 import { SplitItem } from "@/entities/split";
 import { formatRelativeTime } from "@/shared/lib/format-relative-time";
+import { getAvatarUrl } from "@/shared/lib";
 import { Receipt } from "@gravity-ui/icons";
 import {
   Avatar,
@@ -106,7 +107,7 @@ export function SplitCard({ split, crewId }: SplitCardProps) {
                           className="w-8 h-8 rounded-full ring-2 ring-background shrink-0"
                         >
                           {author.avatar && (
-                            <AvatarImage src={author.avatar} alt={displayName} />
+                            <AvatarImage src={getAvatarUrl(author.avatar)} alt={displayName} />
                           )}
                           <AvatarFallback className="text-[10px] font-bold bg-accent/20 text-accent-foreground">
                             {getInitials(displayName)}

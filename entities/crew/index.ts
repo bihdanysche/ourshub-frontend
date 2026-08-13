@@ -11,6 +11,10 @@ export {
   useRemoveMember,
   useUpdateCrew,
   useUpdateMemberAlias,
+  useUploadCrewAvatar,
+  useDeleteCrewAvatar,
+  useUploadCrewCover,
+  useDeleteCrewCover,
 } from "./api/mutations";
 export { crewKeys } from "./api/crew.keys";
 export {

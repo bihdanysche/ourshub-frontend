@@ -2,6 +2,7 @@
 
 import { CrewInvitePreview } from "@/entities/crew";
 import { JoinCrewForm } from "@/features/join-crew";
+import { getAvatarUrl } from "@/shared/lib";
 import { Persons, Picture } from "@gravity-ui/icons";
 import {
   Avatar,
@@ -31,10 +32,10 @@ export function JoinCrewCard({ inviteCode, preview }: JoinCrewCardProps) {
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 sm:p-6">
       <Card className="w-full max-w-md overflow-hidden border border-border/60 bg-surface/40 backdrop-blur-xl rounded-3xl shadow-xl">
-        <div className="relative h-36 sm:h-44 w-full bg-gradient-to-br from-accent/20 via-surface-secondary/70 to-accent/10">
+        <div className="relative w-full aspect-[3/1] bg-gradient-to-br from-accent/20 via-surface-secondary/70 to-accent/10">
           {preview.cover ? (
             <Image
-              src={preview.cover}
+              src={getAvatarUrl(preview.cover)!}
               alt={preview.title}
               fill
               unoptimized
@@ -52,10 +53,10 @@ export function JoinCrewCard({ inviteCode, preview }: JoinCrewCardProps) {
           <Avatar
             size="lg"
             color="accent"
-            className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl ring-4 ring-background shadow-xl shrink-0"
+            className="w-24 h-24 sm:w-28 sm:h-28 rounded-full ring-4 ring-background shadow-xl shrink-0"
           >
             {preview.avatar && (
-              <AvatarImage src={preview.avatar} alt={preview.title} />
+              <AvatarImage src={getAvatarUrl(preview.avatar)} alt={preview.title} />
             )}
             <AvatarFallback className="font-bold text-2xl text-accent-foreground bg-accent/20">
               {getInitials(preview.title)}

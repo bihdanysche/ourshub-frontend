@@ -1,7 +1,7 @@
 "use client";
 
 import { CrewListItem } from "@/entities/crew";
-import { cn } from "@/shared/lib/utils";
+import { cn, getAvatarUrl } from "@/shared/lib";
 import {
   ArrowRightFromSquare,
   Ellipsis,
@@ -85,9 +85,9 @@ export function CrewCard({
             <Avatar
               size="lg"
               color="accent"
-              className="w-14 h-14 rounded-2xl ring-2 ring-border/50 group-hover:ring-accent/40 transition-all shrink-0"
+              className="w-14 h-14 rounded-full ring-2 ring-border/50 group-hover:ring-accent/40 transition-all shrink-0"
             >
-              {crew.avatar && <AvatarImage src={crew.avatar} alt={crew.title} />}
+              {crew.avatar && <AvatarImage src={getAvatarUrl(crew.avatar)} alt={crew.title} />}
               <AvatarFallback className="font-bold text-sm text-accent-foreground bg-accent/20">
                 {getInitials(crew.title)}
               </AvatarFallback>

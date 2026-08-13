@@ -3,13 +3,16 @@
 import {
   editProfileSchema,
   EditProfileInput,
+  useDeleteAvatar,
   useEditProfile,
   useMe,
+  useUploadAvatar,
 } from "@/entities/auth";
 import { toastApiError } from "@/shared/lib/notify-api-error";
-import { cn } from "@/shared/lib/utils";
+import { cn, getAvatarUrl } from "@/shared/lib";
+import { ImageCropModal } from "@/shared/ui/ImageCropModal";
+import { ArrowUpFromLine, At, Delete, FloppyDisk, Person } from "@gravity-ui/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { At, FloppyDisk, Person } from "@gravity-ui/icons";
 import {
   Avatar,
   AvatarFallback,
@@ -18,11 +21,18 @@ import {
   InputGroup,
   InputGroupInput,
   InputGroupPrefix,
+  ModalBackdrop,
+  ModalBody,
+  ModalContainer,
+  ModalDialog,
+  ModalFooter,
+  ModalHeader,
+  ModalHeading,
   Skeleton,
   Spinner,
   toast,
 } from "@heroui/react";
-import { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -37,6 +47,12 @@ export function MyProfileSection() {
   const { t } = useTranslation();
   const { data: user, isPending } = useMe();
   const { mutate: editProfile, isPending: isUpdating } = useEditProfile();
+  const { mutate: uploadAvatar, isPending: isUploadingAvatar } = useUploadAvatar();
+  const { mutate: deleteAvatar, isPending: isDeletingAvatar } = useDeleteAvatar();
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedImageSrc, setSelectedImageSrc] = useState<string | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const {
     register,
@@ -69,6 +85,43 @@ export function MyProfileSection() {
     editProfile(payload, {
       onSuccess: () => {
         toast.success(t("settings.profile.save_success"));
+      },
+      onError: (err) => {
+        toastApiError(err);
+      },
+    });
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSelectedImageSrc(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    e.target.value = "";
+  };
+
+  const handleCropComplete = (croppedFile: File) => {
+    uploadAvatar(croppedFile, {
+      onSuccess: () => {
+        toast.success(t("common.success"));
+        setSelectedImageSrc(null);
+      },
+      onError: (err) => {
+        toastApiError(err);
+      },
+    });
+  };
+
+  const handleDeleteAvatarConfirm = () => {
+    deleteAvatar(undefined, {
+      onSuccess: () => {
+        toast.success(t("common.success"));
+        setIsDeleteModalOpen(false);
       },
       onError: (err) => {
         toastApiError(err);
@@ -118,20 +171,121 @@ export function MyProfileSection() {
       </div>
 
       {user && (
-        <div className="flex items-center gap-4 p-4 sm:p-5 rounded-2xl border border-border/60 bg-surface/40 shadow-xs">
-          <Avatar size="lg" color="accent" className="w-16 h-16 text-base shrink-0">
-            {user.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
-            <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+        <div className="flex items-center gap-4 p-4 sm:p-5 rounded-2xl border border-border/60 bg-surface/40 shadow-xs flex-wrap sm:flex-nowrap">
+          <Avatar size="lg" color="accent" className="w-16 h-16 text-base shrink-0 rounded-full">
+            {user.avatar && <AvatarImage src={getAvatarUrl(user.avatar)} alt={user.name} className="rounded-full" />}
+            <AvatarFallback className="rounded-full">{getInitials(user.name)}</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col min-w-0">
+          <div className="flex flex-col min-w-0 flex-1">
             <p className="text-sm font-semibold text-foreground truncate">
               {t("settings.profile.avatar_title")}
             </p>
-            <p className="text-xs text-foreground/60 mt-0.5">
-              {t("settings.profile.avatar_desc")}
-            </p>
+
+            <div className="flex items-center gap-2 mt-2 flex-wrap">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/jpg,image/heic"
+                className="hidden"
+                onChange={handleFileSelect}
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                isDisabled={isUploadingAvatar || isDeletingAvatar}
+                onPress={() => fileInputRef.current?.click()}
+                className="flex items-center gap-1.5 cursor-pointer text-xs"
+              >
+                {isUploadingAvatar ? (
+                  <Spinner size="sm" color="current" />
+                ) : (
+                  <ArrowUpFromLine className="w-3.5 h-3.5" />
+                )}
+                <span>{t("settings.profile.upload_avatar_btn")}</span>
+              </Button>
+
+              {user.avatar && (
+                <Button
+                  variant="danger-soft"
+                  size="sm"
+                  isDisabled={isUploadingAvatar || isDeletingAvatar}
+                  onPress={() => setIsDeleteModalOpen(true)}
+                  className="flex items-center gap-1.5 cursor-pointer text-xs"
+                >
+                  {isDeletingAvatar ? (
+                    <Spinner size="sm" color="current" />
+                  ) : (
+                    <Delete className="w-3.5 h-3.5" />
+                  )}
+                  <span>{t("settings.profile.delete_avatar_btn")}</span>
+                </Button>
+              )}
+            </div>
           </div>
         </div>
+      )}
+
+      {selectedImageSrc && (
+        <ImageCropModal
+          imageSrc={selectedImageSrc}
+          isOpen={Boolean(selectedImageSrc)}
+          onClose={() => setSelectedImageSrc(null)}
+          onCropComplete={handleCropComplete}
+          aspectRatio={1}
+          cropShape="round"
+        />
+      )}
+
+      {isDeleteModalOpen && (
+        <ModalBackdrop
+          isOpen={isDeleteModalOpen}
+          onOpenChange={(open) => {
+            if (!open && !isDeletingAvatar) setIsDeleteModalOpen(false);
+          }}
+          isDismissable={!isDeletingAvatar}
+          isKeyboardDismissDisabled={isDeletingAvatar}
+        >
+          <ModalContainer placement="center" size="sm">
+            <ModalDialog className="border border-border/60 bg-background/95 backdrop-blur-xl">
+              <ModalHeader className="flex flex-col gap-1">
+                <ModalHeading className="text-base font-bold text-foreground">
+                  {t("settings.profile.delete_avatar_btn")}
+                </ModalHeading>
+              </ModalHeader>
+
+              <ModalBody className="py-2">
+                <p className="text-sm text-foreground/80">
+                  {t("settings.profile.delete_avatar_confirm")}
+                </p>
+              </ModalBody>
+
+              <ModalFooter className="flex justify-end gap-3 pt-4">
+                <Button
+                  variant="outline"
+                  type="button"
+                  isDisabled={isDeletingAvatar}
+                  onPress={() => setIsDeleteModalOpen(false)}
+                >
+                  {t("common.cancel")}
+                </Button>
+                <Button
+                  variant="danger"
+                  type="button"
+                  isDisabled={isDeletingAvatar}
+                  onPress={handleDeleteAvatarConfirm}
+                  className="flex items-center gap-2"
+                >
+                  {isDeletingAvatar ? (
+                    <Spinner size="sm" color="current" />
+                  ) : (
+                    <Delete className="w-4 h-4" />
+                  )}
+                  <span>{t("settings.profile.delete_avatar_btn")}</span>
+                </Button>
+              </ModalFooter>
+            </ModalDialog>
+          </ModalContainer>
+        </ModalBackdrop>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 max-w-xl">

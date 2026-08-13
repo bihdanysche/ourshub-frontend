@@ -2,6 +2,7 @@
 
 import { useSplitHistory } from "@/entities/split";
 import { formatRelativeTime } from "@/shared/lib/format-relative-time";
+import { getAvatarUrl } from "@/shared/lib";
 import { useDebounce } from "@/shared/lib/use-debounce";
 import { Clock, Comment, Magnifier, Receipt, TriangleExclamationFill } from "@gravity-ui/icons";
 import {
@@ -115,11 +116,11 @@ export function SplitHistoryTab({ splitId, authors }: SplitHistoryTabProps) {
                     <div className="flex items-center gap-3 min-w-0">
                       <Avatar
                         size="sm"
-                        className="w-9 h-9 rounded-xl shrink-0"
+                        className="w-9 h-9 rounded-full shrink-0"
                       >
                         {item.user.avatar && (
                           <AvatarImage
-                            src={item.user.avatar}
+                            src={getAvatarUrl(item.user.avatar)}
                             alt={userName}
                           />
                         )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { CrewMember } from "@/entities/crew";
+import { getAvatarUrl } from "@/shared/lib";
 import {
   Ellipsis,
   PersonPencil,
@@ -63,9 +64,9 @@ export function CrewMemberItem({
         <Avatar
           size="md"
           color="accent"
-          className="w-12 h-12 rounded-2xl ring-2 ring-border/40 group-hover:ring-accent/40 transition-all shrink-0"
+          className="w-12 h-12 rounded-full ring-2 ring-border/40 group-hover:ring-accent/40 transition-all shrink-0"
         >
-          {member.avatar && <AvatarImage src={member.avatar} alt={displayName} />}
+          {member.avatar && <AvatarImage src={getAvatarUrl(member.avatar)} alt={displayName} />}
           <AvatarFallback className="font-bold text-sm text-accent-foreground bg-accent/20">
             {getInitials(displayName)}
           </AvatarFallback>

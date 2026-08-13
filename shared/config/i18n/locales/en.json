@@ -82,7 +82,20 @@
     "REQUEST_AMOUNT_EXCEEDS_REMAINING_DEBT": "Request amount exceeds your remaining debt",
     "ONLY_REQUEST_USER_CAN_CANCEL": "Only the request creator can cancel this request",
     "CANNOT_REQUEST_OWN_EXPENSE": "You cannot create a request for an expense where you are the spender",
-    "UNKNOWN_ERROR": "Unknown error"
+    "UNKNOWN_ERROR": "An unknown error occurred",
+    "IMAGE_REQUIRED": "Image file is required",
+    "INVALID_IMAGE_FORMAT": "Unsupported image format. Allowed formats: PNG, JPG, JPEG, HEIC",
+    "IMAGE_TOO_LARGE": "Image file is too large",
+    "INVALID_IMAGE_ASPECT_RATIO": "Invalid image aspect ratio",
+    "ATTACHMENT_TOO_LARGE": "Attachment file size exceeds the 200 MB limit",
+    "MAX_ATTACHMENTS_EXCEEDED": "Maximum of 15 attachments per post reached",
+    "ATTACHMENT_NOT_FOUND": "Attachment not found"
+  },
+  "crop_modal": {
+    "title": "Crop image",
+    "zoom": "Zoom:",
+    "crop_btn": "Save",
+    "cancel_btn": "Cancel"
   },
   "splits": {
     "create_btn": "New Split",
@@ -217,11 +230,13 @@
     }
   },
   "posts": {
-    "create": {
-      "placeholder": "What's on your mind? Write a post...",
-      "submit_btn": "Publish",
-      "submitting_btn": "Publishing...",
-      "success_toast": "Post published successfully!"
+    "attachments": {
+      "add_btn": "Add media",
+      "limit_error": "Maximum 15 attachments allowed per post",
+      "size_error": "File size cannot exceed 200 MB",
+      "delete_confirm": "Are you sure you want to delete this attachment?",
+      "audio_playing": "Playing audio",
+      "audio_paused": "Paused"
     },
     "card": {
       "edited": "edited",
@@ -230,20 +245,28 @@
         "delete": "Delete post"
       }
     },
-    "edit_modal": {
-      "title": "Edit Post",
-      "subtitle": "Update your post content",
-      "placeholder": "Edit post text...",
-      "cancel_btn": "Cancel",
-      "save_btn": "Save changes",
-      "success_toast": "Post updated successfully!"
+    "create": {
+      "placeholder": "What's on your mind?",
+      "submit_btn": "Post",
+      "submitting_btn": "Posting...",
+      "success_toast": "Post published successfully"
     },
     "delete_modal": {
-      "title": "Delete Post",
-      "desc": "Are you sure you want to delete this post? This action cannot be undone.",
+      "title": "Delete post",
+      "description": "Are you sure you want to delete this post? This action cannot be undone.",
+      "confirm_btn": "Delete",
       "cancel_btn": "Cancel",
-      "delete_btn": "Delete",
-      "success_toast": "Post deleted successfully!"
+      "success_toast": "Post deleted successfully"
+    },
+    "edit_modal": {
+      "title": "Edit post",
+      "subtitle": "Update post content and attachments",
+      "placeholder": "Write something...",
+      "save_btn": "Save changes",
+      "cancel_btn": "Cancel",
+      "success_toast": "Post updated successfully",
+      "existing_attachments": "Existing attachments",
+      "new_attachments": "New attachments to upload"
     },
     "empty": {
       "title": "No posts yet",
@@ -273,7 +296,9 @@
       "title": "My Profile",
       "description": "Manage your profile details and personal information",
       "avatar_title": "Profile Avatar",
-      "avatar_desc": "The ability to change your avatar will be available in a future update",
+      "upload_avatar_btn": "Upload avatar",
+      "delete_avatar_btn": "Delete avatar",
+      "delete_avatar_confirm": "Are you sure you want to delete your avatar?",
       "name_label": "Name",
       "name_placeholder": "Enter your name",
       "name_helper": "Your display name visible to other users",
@@ -495,6 +520,14 @@
     }
   },
   "crew_page": {
+    "upload_avatar_btn": "Upload crew avatar",
+    "delete_avatar_btn": "Delete crew avatar",
+    "delete_avatar_confirm": "Are you sure you want to delete the crew avatar?",
+    "upload_cover_btn": "Upload cover",
+    "delete_cover_btn": "Delete cover",
+    "delete_cover_confirm": "Are you sure you want to delete the crew cover?",
+    "crop_avatar_title": "Crop Crew Avatar",
+    "crop_cover_title": "Crop Crew Cover",
     "roles": {
       "owner": "You are Owner",
       "member": "You are Member"

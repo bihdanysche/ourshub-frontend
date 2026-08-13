@@ -7,9 +7,11 @@ import {
 } from "@/entities/post";
 import { toastApiError } from "@/shared/lib/notify-api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PaperPlane } from "@gravity-ui/icons";
+import { Eye, Paperclip, PaperPlane, TrashBin, Xmark } from "@gravity-ui/icons";
 import { Button, Card, CardContent, Spinner, TextArea, toast } from "@heroui/react";
-import { useEffect, useRef } from "react";
+import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -17,10 +19,25 @@ interface CreatePostFormProps {
   crewId: number;
 }
 
+interface DraftFile {
+  id: string;
+  file: File;
+  previewUrl?: string;
+  type: "IMAGE" | "VIDEO" | "AUDIO" | "FILE";
+}
+
 export function CreatePostForm({ crewId }: CreatePostFormProps) {
   const { t } = useTranslation();
   const { mutate: createPost, isPending } = useCreatePost(crewId);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [draftFiles, setDraftFiles] = useState<DraftFile[]>([]);
+  const [previewMedia, setPreviewMedia] = useState<{
+    url: string;
+    type: "IMAGE" | "VIDEO";
+    name: string;
+  } | null>(null);
 
   const {
     register,
@@ -50,16 +67,77 @@ export function CreatePostForm({ crewId }: CreatePostFormProps) {
 
   const { ref: registerRef, ...registerProps } = register("content");
 
-  const onSubmit = (data: PostContentInput) => {
-    createPost(data, {
-      onSuccess: () => {
-        toast.success(t("posts.create.success_toast"));
-        reset();
-      },
-      onError: (err) => {
-        toastApiError(err);
-      },
+  const handleFilesSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    if (selectedFiles.length === 0) return;
+
+    if (draftFiles.length + selectedFiles.length > 15) {
+      toast.danger(t("api_errors.MAX_ATTACHMENTS_EXCEEDED"));
+      return;
+    }
+
+    const newDrafts: DraftFile[] = [];
+    for (const file of selectedFiles) {
+      if (file.size > 200 * 1024 * 1024) {
+        toast.danger(t("api_errors.ATTACHMENT_TOO_LARGE"));
+        continue;
+      }
+
+      let type: "IMAGE" | "VIDEO" | "AUDIO" | "FILE" = "FILE";
+      let previewUrl: string | undefined = undefined;
+
+      if (file.type.startsWith("image/")) {
+        type = "IMAGE";
+        previewUrl = URL.createObjectURL(file);
+      } else if (file.type.startsWith("video/")) {
+        type = "VIDEO";
+        previewUrl = URL.createObjectURL(file);
+      } else if (file.type.startsWith("audio/")) {
+        type = "AUDIO";
+      }
+
+      newDrafts.push({
+        id: `${file.name}-${Date.now()}-${Math.random()}`,
+        file,
+        previewUrl,
+        type,
+      });
+    }
+
+    setDraftFiles((prev) => [...prev, ...newDrafts]);
+    e.target.value = "";
+  };
+
+  const removeDraftFile = (id: string) => {
+    setDraftFiles((prev) => {
+      const item = prev.find((f) => f.id === id);
+      if (item?.previewUrl) {
+        URL.revokeObjectURL(item.previewUrl);
+      }
+      return prev.filter((f) => f.id !== id);
     });
+  };
+
+  const onSubmit = (data: PostContentInput) => {
+    createPost(
+      {
+        content: data.content,
+        files: draftFiles.map((df) => df.file),
+      },
+      {
+        onSuccess: () => {
+          toast.success(t("posts.create.success_toast"));
+          reset();
+          draftFiles.forEach((df) => {
+            if (df.previewUrl) URL.revokeObjectURL(df.previewUrl);
+          });
+          setDraftFiles([]);
+        },
+        onError: (err) => {
+          toastApiError(err);
+        },
+      },
+    );
   };
 
   return (
@@ -98,7 +176,116 @@ export function CreatePostForm({ crewId }: CreatePostFormProps) {
             </div>
           </div>
 
-          <div className="flex justify-end">
+          {/* Draft Attachments Preview */}
+          {draftFiles.length > 0 && (
+            <div className="flex flex-wrap gap-2 p-2 rounded-2xl bg-surface-secondary/30 border border-border/40 max-h-48 overflow-y-auto">
+              {draftFiles.map((df) => (
+                <div
+                  key={df.id}
+                  className="relative group rounded-xl overflow-hidden border border-border/50 bg-background/80 flex items-center gap-2 p-1.5 pr-2 shrink-0"
+                >
+                  {df.type === "IMAGE" && df.previewUrl && (
+                    <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0">
+                      <Image
+                        src={df.previewUrl}
+                        alt={df.file.name}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+
+                  {df.type === "VIDEO" && (
+                    <div className="w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center text-xs font-bold shrink-0">
+                      VID
+                    </div>
+                  )}
+
+                  {df.type === "AUDIO" && (
+                    <div className="w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center text-xs font-bold shrink-0">
+                      AUD
+                    </div>
+                  )}
+
+                  {df.type === "FILE" && (
+                    <div className="w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center text-xs font-bold shrink-0">
+                      FILE
+                    </div>
+                  )}
+
+                  <div className="flex flex-col min-w-0 max-w-[110px]">
+                    <span className="text-xs font-medium text-foreground truncate">
+                      {df.file.name}
+                    </span>
+                    <span className="text-[10px] text-foreground/50 font-mono">
+                      {(df.file.size / (1024 * 1024)).toFixed(1)}MB
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1 ml-1">
+                    {(df.type === "IMAGE" || df.type === "VIDEO") && df.previewUrl && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        isDisabled={isPending}
+                        onPress={() =>
+                          setPreviewMedia({
+                            url: df.previewUrl!,
+                            type: df.type as "IMAGE" | "VIDEO",
+                            name: df.file.name,
+                          })
+                        }
+                        className="w-6 h-6 min-w-0 p-0 rounded-full cursor-pointer bg-background/80 hover:bg-background text-foreground border-border/50"
+                        aria-label="Preview"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </Button>
+                    )}
+
+                    <Button
+                      variant="danger-soft"
+                      size="sm"
+                      isDisabled={isPending}
+                      onPress={() => removeDraftFile(df.id)}
+                      className="w-6 h-6 min-w-0 p-0 rounded-full cursor-pointer"
+                      aria-label="Remove"
+                    >
+                      <Xmark className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                disabled={isPending || draftFiles.length >= 15}
+                onChange={handleFilesSelect}
+                className="hidden"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                isDisabled={isPending || draftFiles.length >= 15}
+                onPress={() => fileInputRef.current?.click()}
+                className="flex items-center gap-1.5 text-xs font-semibold cursor-pointer border-border/60 hover:bg-surface-secondary px-3 shrink-0"
+              >
+                <Paperclip className="w-4 h-4 text-foreground/70 shrink-0" />
+                <span>{t("posts.attachments.add_btn")}</span>
+                {draftFiles.length > 0 && (
+                  <span className="text-foreground/60 font-normal ml-0.5">
+                    ({draftFiles.length}/15)
+                  </span>
+                )}
+              </Button>
+            </div>
+
             <Button
               variant="primary"
               type="submit"
@@ -120,6 +307,45 @@ export function CreatePostForm({ crewId }: CreatePostFormProps) {
           </div>
         </form>
       </CardContent>
+
+      {/* Lightbox Preview Modal for Draft Photos & Videos via Portal */}
+      {typeof window !== "undefined" &&
+        previewMedia &&
+        createPortal(
+          <div
+            onClick={() => setPreviewMedia(null)}
+            className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 cursor-default animate-in fade-in-0 duration-200"
+          >
+            <Button
+              variant="outline"
+              size="sm"
+              onPress={() => setPreviewMedia(null)}
+              className="fixed top-5 right-5 z-[100000] w-11 h-11 min-w-0 p-0 rounded-full bg-white/10 hover:bg-white/20 text-white border-white/20 shadow-2xl cursor-pointer"
+            >
+              <Xmark className="w-6 h-6" />
+            </Button>
+
+            <div className="relative w-full h-full max-w-[95vw] max-h-[92vh] flex items-center justify-center cursor-default">
+              {previewMedia.type === "IMAGE" ? (
+                <Image
+                  src={previewMedia.url}
+                  alt={previewMedia.name}
+                  fill
+                  unoptimized
+                  className="object-contain select-none"
+                />
+              ) : (
+                <video
+                  src={previewMedia.url}
+                  controls
+                  autoPlay
+                  className="max-w-5xl max-h-[90vh] rounded-2xl object-contain shadow-2xl"
+                />
+              )}
+            </div>
+          </div>,
+          document.body,
+        )}
     </Card>
   );
 }

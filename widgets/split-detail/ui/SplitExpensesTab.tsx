@@ -1,6 +1,7 @@
 "use client";
 
 import { useMe } from "@/entities/auth";
+import { getAvatarUrl } from "@/shared/lib";
 import {
   SplitDetail,
   useDeleteExpense,
@@ -405,9 +406,9 @@ function ExpenseCardItem({
                   className="flex items-center justify-between p-3 rounded-2xl border border-border/40 bg-surface-secondary/40 text-xs transition-colors"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <Avatar size="sm" className="w-8 h-8 rounded-xl shrink-0">
+                    <Avatar size="sm" className="w-8 h-8 rounded-full shrink-0">
                       {m.user.avatar && (
-                        <AvatarImage src={m.user.avatar} alt={memberName} />
+                        <AvatarImage src={getAvatarUrl(m.user.avatar)} alt={memberName} />
                       )}
                       <AvatarFallback className="text-xs font-bold bg-accent/20 text-accent-foreground">
                         {getInitials(memberName)}

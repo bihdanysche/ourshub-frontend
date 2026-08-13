@@ -2,6 +2,7 @@
 
 import { useLogout, useMe } from "@/entities/auth";
 import { isUnauthorizedError } from "@/shared/api";
+import { getAvatarUrl } from "@/shared/lib";
 import {
   ArrowChevronDown,
   ArrowRightFromSquare,
@@ -87,8 +88,8 @@ export function UserMenu() {
     <Dropdown>
       <DropdownTrigger className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface/50 hover:bg-surface-secondary border border-border/80 hover:border-accent/60 data-[hovered=true]:bg-surface-secondary data-[hovered=true]:border-accent/60 active:scale-[0.98] transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 data-[focused=true]:outline-none data-[focus-visible=true]:outline-none data-[focus-visible=true]:ring-0">
         <div className="flex items-center gap-2.5">
-          <Avatar size="sm" color="accent">
-            {user.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
+          <Avatar size="sm" color="accent" className="rounded-full">
+            {user.avatar && <AvatarImage src={getAvatarUrl(user.avatar)} alt={user.name} />}
             <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
           </Avatar>
           <span className="text-sm font-medium text-foreground hidden sm:block max-w-[140px] truncate">

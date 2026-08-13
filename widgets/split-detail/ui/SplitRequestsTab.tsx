@@ -1,6 +1,7 @@
 "use client";
 
 import { useMe } from "@/entities/auth";
+import { getAvatarUrl } from "@/shared/lib";
 import {
   ExpenseRequestItem,
   ExpenseRequestRoleFilter,
@@ -184,9 +185,9 @@ function RequestCardItem({
       <CardContent className="p-0 flex flex-col gap-4">
         <div className="flex items-start justify-between gap-4 flex-wrap border-b border-border/30 pb-3">
           <div className="flex items-center gap-3 min-w-0">
-            <Avatar size="sm" className="w-10 h-10 rounded-2xl shrink-0">
+            <Avatar size="sm" className="w-10 h-10 rounded-full shrink-0">
               {item.user.avatar && (
-                <AvatarImage src={item.user.avatar} alt={userName} />
+                <AvatarImage src={getAvatarUrl(item.user.avatar)} alt={userName} />
               )}
               <AvatarFallback className="text-xs font-bold bg-accent/20 text-accent-foreground">
                 {getInitials(userName)}

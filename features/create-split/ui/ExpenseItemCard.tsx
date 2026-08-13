@@ -1,6 +1,7 @@
 "use client";
 
 import { CrewMember } from "@/entities/crew";
+import { getAvatarUrl } from "@/shared/lib";
 import { Receipt, TrashBin } from "@gravity-ui/icons";
 import {
   Avatar,
@@ -220,9 +221,9 @@ export function ExpenseItemCard({
                     className="rounded cursor-pointer shrink-0"
                   />
 
-                  <Avatar size="sm" className="w-8 h-8 rounded-xl shrink-0">
+                  <Avatar size="sm" className="w-8 h-8 rounded-full shrink-0">
                     {member?.avatar && (
-                      <AvatarImage src={member.avatar} alt={displayName} />
+                      <AvatarImage src={getAvatarUrl(member.avatar)} alt={displayName} />
                     )}
                     <AvatarFallback className="text-xs font-bold bg-accent/20 text-accent-foreground">
                       {getInitials(displayName)}

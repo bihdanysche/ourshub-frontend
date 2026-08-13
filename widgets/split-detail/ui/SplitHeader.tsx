@@ -4,6 +4,7 @@ import { SplitDetail, SplitUser, useArchiveSplit } from "@/entities/split";
 import { EditSplitModal } from "@/features/manage-split-expense";
 import { formatRelativeTime } from "@/shared/lib/format-relative-time";
 import { toastApiError } from "@/shared/lib/notify-api-error";
+import { getAvatarUrl } from "@/shared/lib";
 import { Archive, Pencil, Receipt } from "@gravity-ui/icons";
 import {
   Avatar,
@@ -203,9 +204,9 @@ export function SplitHeader({ split }: SplitHeaderProps) {
                   <Tooltip key={author.id}>
                     <Tooltip.Trigger>
                       <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-surface-secondary/50 border border-border/40">
-                        <Avatar size="sm" className="w-6 h-6 rounded-lg shrink-0">
+                        <Avatar size="sm" className="w-6 h-6 rounded-full shrink-0">
                           {author.avatar && (
-                            <AvatarImage src={author.avatar} alt={displayName} />
+                            <AvatarImage src={getAvatarUrl(author.avatar)} alt={displayName} />
                           )}
                           <AvatarFallback className="text-[9px] font-bold bg-accent/20 text-accent-foreground">
                             {getInitials(displayName)}

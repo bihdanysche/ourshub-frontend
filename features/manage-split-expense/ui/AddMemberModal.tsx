@@ -3,6 +3,7 @@
 import { useCrewMembers } from "@/entities/crew";
 import { useAddMemberToExpense } from "@/entities/split";
 import { toastApiError } from "@/shared/lib/notify-api-error";
+import { getAvatarUrl } from "@/shared/lib";
 import { Check, Plus } from "@gravity-ui/icons";
 import {
   Avatar,
@@ -158,9 +159,9 @@ export function AddMemberModal({
                           onChange={() => handleToggleMember(m.userId)}
                           className="rounded cursor-pointer"
                         />
-                        <Avatar size="sm" className="w-8 h-8 rounded-xl shrink-0">
+                        <Avatar size="sm" className="w-8 h-8 rounded-full shrink-0">
                           {m.avatar && (
-                            <AvatarImage src={m.avatar} alt={displayName} />
+                            <AvatarImage src={getAvatarUrl(m.avatar)} alt={displayName} />
                           )}
                           <AvatarFallback className="text-xs font-bold bg-accent/20 text-accent-foreground">
                             {getInitials(displayName)}

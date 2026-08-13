@@ -6,11 +6,21 @@ export interface PostAuthor {
   avatar: string | null;
 }
 
+export interface PostAttachment {
+  id: number;
+  url?: string;
+  key?: string;
+  type: "IMAGE" | "VIDEO" | "AUDIO" | "FILE" | string;
+  name?: string;
+  size?: number;
+}
+
 export interface PostItem {
   id: number;
   content: string;
   youIsAuthor: boolean;
   author: PostAuthor;
+  attachments?: PostAttachment[];
   createdAt: string;
   updatedAt: string;
 }
