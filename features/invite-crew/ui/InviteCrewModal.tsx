@@ -40,7 +40,8 @@ export function InviteCrewModal({
     () => "",
   );
 
-  const inviteUrl = inviteCode && origin ? `${origin}/join-crew/${inviteCode}` : "";
+  const inviteUrl =
+    inviteCode && origin ? `${origin}/join-crew/${inviteCode}` : "";
 
   const handleCopy = async () => {
     if (!inviteUrl) return;
@@ -65,7 +66,7 @@ export function InviteCrewModal({
       isKeyboardDismissDisabled={false}
     >
       <ModalContainer placement="center" size="md">
-        <ModalDialog className="border border-border/60 bg-background/95 backdrop-blur-xl">
+        <ModalDialog className="border border-border/61 bg-background/95 backdrop-blur-xl">
           <ModalHeader className="flex flex-col gap-1 text-center items-center">
             <div className="w-12 h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center border border-accent/20 mb-1">
               <QrCode className="w-6 h-6" />
