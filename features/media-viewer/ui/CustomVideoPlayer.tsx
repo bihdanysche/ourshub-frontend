@@ -63,7 +63,6 @@ export function CustomVideoPlayer({ src, name }: CustomVideoPlayerProps) {
     }
   };
 
-  // YouTube-Style Seeking: Silence & Pause while dragging, commit on release
   const handleSeekStart = () => {
     setIsScrubbing(true);
     wasPlayingRef.current = isPlaying;
@@ -135,7 +134,6 @@ export function CustomVideoPlayer({ src, name }: CustomVideoPlayerProps) {
         playsInline
       />
 
-      {/* Center Big Play/Pause Button when paused */}
       {!isPlaying && (
         <button
           type="button"
@@ -148,13 +146,11 @@ export function CustomVideoPlayer({ src, name }: CustomVideoPlayerProps) {
         </button>
       )}
 
-      {/* Custom Bottom Controls Bar */}
       <div
         className={`absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-3 flex flex-col gap-2 transition-opacity duration-200 z-20 ${
           showControls || !isPlaying ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* Smooth Continuous Range Seek Bar */}
         <input
           type="range"
           step="any"

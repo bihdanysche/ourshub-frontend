@@ -4,7 +4,7 @@ import { useCrewMembers } from "@/entities/crew";
 import { useAddMemberToExpense } from "@/entities/split";
 import { toastApiError } from "@/shared/lib/notify-api-error";
 import { getAvatarUrl } from "@/shared/lib";
-import { Check, Plus } from "@gravity-ui/icons";
+import { Plus } from "@gravity-ui/icons";
 import {
   Avatar,
   AvatarFallback,

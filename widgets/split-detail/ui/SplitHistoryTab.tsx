@@ -193,7 +193,7 @@ export function SplitHistoryTab({ splitId, authors }: SplitHistoryTabProps) {
                         )}
                       </div>
                       <p className="italic font-medium leading-relaxed pl-5">
-                        "{item.msg}"
+                        &quot;{item.msg}&quot;
                       </p>
                     </div>
                   )}

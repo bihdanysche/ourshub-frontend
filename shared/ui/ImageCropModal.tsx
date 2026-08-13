@@ -126,7 +126,6 @@ export function ImageCropModal({
       onCropComplete(file);
       onClose();
     } catch {
-      // ignore
     } finally {
       setIsProcessing(false);
     }

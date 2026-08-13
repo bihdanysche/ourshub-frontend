@@ -239,7 +239,7 @@ function RequestCardItem({
         {item.msg && (
           <div className="flex items-start gap-2.5 p-3 rounded-2xl bg-surface-secondary/50 border border-border/40 text-xs text-foreground/80">
             <Comment className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-            <p className="italic font-medium leading-relaxed">"{item.msg}"</p>
+            <p className="italic font-medium leading-relaxed">&quot;{item.msg}&quot;</p>
           </div>
         )}
 

@@ -3,7 +3,6 @@
 import { getApiErrorCode } from "@/shared/api";
 import {
   ArrowRotateRight,
-  CircleExclamationFill,
   House,
   Persons,
   TriangleExclamationFill,

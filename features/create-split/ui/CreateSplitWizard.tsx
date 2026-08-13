@@ -37,7 +37,7 @@ export function CreateSplitWizard({ crewId }: CreateSplitWizardProps) {
   );
 
   const { data: membersData } = useCrewMembers(crewId);
-  const allMembers = membersData?.items ?? [];
+  const allMembers = useMemo(() => membersData?.items ?? [], [membersData?.items]);
 
   const effectiveSelectedMemberIds = useMemo(() => {
     if (!currentUserId) return selectedMemberIds;

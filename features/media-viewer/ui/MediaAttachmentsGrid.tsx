@@ -5,7 +5,7 @@ import { formatAttachmentName, getAvatarUrl } from "@/shared/lib";
 import { File, Xmark } from "@gravity-ui/icons";
 import { Button } from "@heroui/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { CustomAudioPlayer } from "./CustomAudioPlayer";
 import { CustomVideoPlayer } from "./CustomVideoPlayer";
@@ -13,6 +13,10 @@ import { CustomVideoPlayer } from "./CustomVideoPlayer";
 interface MediaAttachmentsGridProps {
   attachments: PostAttachment[];
 }
+
+const emptySubscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 const getAttachmentUrl = (attachment: PostAttachment): string => {
   const raw =
@@ -41,11 +45,7 @@ const getFileType = (attachment: PostAttachment): "IMAGE" | "VIDEO" | "AUDIO" | 
 
 export function MediaAttachmentsGrid({ attachments }: MediaAttachmentsGridProps) {
   const [activeImage, setActiveImage] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);
 
   if (!attachments || attachments.length === 0) return null;
 
@@ -56,7 +56,6 @@ export function MediaAttachmentsGrid({ attachments }: MediaAttachmentsGridProps)
 
   return (
     <div className="flex flex-col gap-3 mt-3 w-full">
-      {/* Images Grid */}
       {images.length > 0 && (
         <div
           className={`grid gap-2 rounded-2xl overflow-hidden ${
@@ -90,17 +89,14 @@ export function MediaAttachmentsGrid({ attachments }: MediaAttachmentsGridProps)
         </div>
       )}
 
-      {/* Videos */}
       {videos.map((vid) => (
         <CustomVideoPlayer key={vid.id} src={getAttachmentUrl(vid)} name={vid.name} />
       ))}
 
-      {/* Audio Players */}
       {audios.map((aud) => (
         <CustomAudioPlayer key={aud.id} src={getAttachmentUrl(aud)} name={aud.name} />
       ))}
 
-      {/* Files List */}
       {files.map((file) => {
         const url = getAttachmentUrl(file);
         return (
@@ -128,7 +124,6 @@ export function MediaAttachmentsGrid({ attachments }: MediaAttachmentsGridProps)
         );
       })}
 
-      {/* Full-Screen Lightbox: Closes by clicking ANYWHERE on screen */}
       {mounted &&
         activeImage &&
         createPortal(

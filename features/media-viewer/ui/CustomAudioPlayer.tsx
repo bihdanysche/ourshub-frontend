@@ -30,7 +30,7 @@ function SolidPlayIcon({ className }: { className?: string }) {
 function SolidPauseIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className || "w-5 h-5"}>
-      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
     </svg>
   );
 }
@@ -99,32 +99,33 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
     }
   };
 
-  // Ultra-sharp pure sub-bass (20Hz-150Hz) kick drum pop
-  const updateBassAnalysis = () => {
-    const analyser = analyserRef.current;
-    if (!analyser || !isPlaying || isScrubbing) {
-      setDiscScale(1.0);
-      animFrameRef.current = null;
-      return;
-    }
+  const updateBassRef = useRef<() => void>(() => {});
 
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(dataArray);
+  useEffect(() => {
+    updateBassRef.current = () => {
+      const analyser = analyserRef.current;
+      if (!analyser || !isPlaying || isScrubbing) {
+        setDiscScale(1.0);
+        animFrameRef.current = null;
+        return;
+      }
 
-    // Isolate pure sub-bass bins 0 & 1 (20Hz - 150Hz)
-    const rawBass = Math.max(dataArray[0] || 0, dataArray[1] || 0) / 255;
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(dataArray);
 
-    // Cubic power scaling curve: zero movement on non-bass, instant sharp pop on bass drop
-    if (rawBass > 0.3) {
-      const powerBass = Math.pow((rawBass - 0.3) / 0.7, 1.8);
-      const targetScale = 1.0 + powerBass * 0.22;
-      setDiscScale(targetScale);
-    } else {
-      setDiscScale(1.0);
-    }
+      const rawBass = Math.max(dataArray[0] || 0, dataArray[1] || 0) / 255;
 
-    animFrameRef.current = requestAnimationFrame(updateBassAnalysis);
-  };
+      if (rawBass > 0.3) {
+        const powerBass = Math.pow((rawBass - 0.3) / 0.7, 1.8);
+        const targetScale = 1.0 + powerBass * 0.22;
+        setDiscScale(targetScale);
+      } else {
+        setDiscScale(1.0);
+      }
+
+      animFrameRef.current = requestAnimationFrame(() => updateBassRef.current());
+    };
+  }, [isPlaying, isScrubbing]);
 
   useEffect(() => {
     if (isPlaying && !isScrubbing) {
@@ -133,14 +134,14 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
         audioCtxRef.current.resume();
       }
       if (!animFrameRef.current) {
-        animFrameRef.current = requestAnimationFrame(updateBassAnalysis);
+        animFrameRef.current = requestAnimationFrame(() => updateBassRef.current());
       }
     } else {
       if (animFrameRef.current) {
         cancelAnimationFrame(animFrameRef.current);
         animFrameRef.current = null;
       }
-      setDiscScale(1.0);
+      requestAnimationFrame(() => setDiscScale(1.0));
     }
 
     return () => {

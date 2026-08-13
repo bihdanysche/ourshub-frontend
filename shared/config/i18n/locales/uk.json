@@ -1,8 +1,4 @@
 {
-  "temporary_test": {
-    "welcome": "Привіт, світ!",
-    "change_lang": "Змінити мову"
-  },
   "common": {
     "success": "Успіх!",
     "error": "Помилка",

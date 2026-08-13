@@ -7,7 +7,7 @@ import {
 } from "@/entities/post";
 import { toastApiError } from "@/shared/lib/notify-api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, Paperclip, PaperPlane, TrashBin, Xmark } from "@gravity-ui/icons";
+import { Eye, Paperclip, PaperPlane, Xmark } from "@gravity-ui/icons";
 import { Button, Card, CardContent, Spinner, TextArea, toast } from "@heroui/react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
@@ -43,7 +43,7 @@ export function CreatePostForm({ crewId }: CreatePostFormProps) {
     register,
     handleSubmit,
     reset,
-    watch,
+    control,
     formState: { errors },
   } = useForm<PostContentInput>({
     resolver: zodResolver(postContentSchema),
@@ -53,7 +53,7 @@ export function CreatePostForm({ crewId }: CreatePostFormProps) {
     },
   });
 
-  const contentValue = watch("content") || "";
+  const contentValue = useWatch({ control, name: "content" }) || "";
   const isTooLong = contentValue.length > 1500;
 
   useEffect(() => {
@@ -176,7 +176,6 @@ export function CreatePostForm({ crewId }: CreatePostFormProps) {
             </div>
           </div>
 
-          {/* Draft Attachments Preview */}
           {draftFiles.length > 0 && (
             <div className="flex flex-wrap gap-2 p-2 rounded-2xl bg-surface-secondary/30 border border-border/40 max-h-48 overflow-y-auto">
               {draftFiles.map((df) => (
@@ -308,7 +307,6 @@ export function CreatePostForm({ crewId }: CreatePostFormProps) {
         </form>
       </CardContent>
 
-      {/* Lightbox Preview Modal for Draft Photos & Videos via Portal */}
       {typeof window !== "undefined" &&
         previewMedia &&
         createPortal(

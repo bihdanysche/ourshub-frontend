@@ -9,7 +9,7 @@ export const useMe = () => {
     queryFn: async () => {
       try {
         const res = await apiClient.get<UserMe>("/auth/me");
-        return ((res as any)?.data ?? res) as UserMe;
+        return (res as unknown as { data: UserMe })?.data ?? (res as unknown as UserMe);
       } catch (error) {
         if (isUnauthorizedError(error)) {
           return null;

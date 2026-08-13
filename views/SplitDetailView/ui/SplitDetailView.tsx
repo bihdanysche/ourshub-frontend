@@ -70,7 +70,7 @@ export function SplitDetailView() {
     }
 
     return list;
-  }, [split?.archived, split?.requestsCount, t]);
+  }, [split, t]);
 
   const currentTab = split?.archived && activeTab === "requests" ? "expenses" : activeTab;
 

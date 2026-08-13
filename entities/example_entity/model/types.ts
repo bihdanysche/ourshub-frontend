@@ -1,1 +1,4 @@
-export interface UserMe {}
+export interface UserMe {
+  id: string;
+  name: string;
+}

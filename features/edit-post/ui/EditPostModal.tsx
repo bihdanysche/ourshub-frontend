@@ -8,7 +8,6 @@ import {
   useEditPost,
   useUploadPostAttachments,
 } from "@/entities/post";
-import { getAvatarUrl } from "@/shared/lib";
 import { toastApiError } from "@/shared/lib/notify-api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, Paperclip, Pencil, TrashBin, Xmark } from "@gravity-ui/icons";
@@ -28,7 +27,7 @@ import {
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 interface EditPostModalProps {
@@ -71,7 +70,7 @@ export function EditPostModal({
     register,
     handleSubmit,
     reset,
-    watch,
+    control,
     formState: { errors },
   } = useForm<PostContentInput>({
     resolver: zodResolver(postContentSchema),
@@ -81,14 +80,22 @@ export function EditPostModal({
     },
   });
 
+  const [prevPostId, setPrevPostId] = useState<number | null>(null);
+
+  const currentPostId = post?.id ?? null;
+  if (currentPostId !== prevPostId) {
+    setPrevPostId(currentPostId);
+    setNewFiles([]);
+    setNewFilePreviews([]);
+  }
+
   useEffect(() => {
     if (post) {
       reset({ content: post.content });
-      setNewFiles([]);
     }
   }, [post, reset]);
 
-  const contentValue = watch("content") || "";
+  const contentValue = useWatch({ control, name: "content" }) || "";
   const isTooLong = contentValue.length > 1500;
   const isUnchanged =
     post ? contentValue.trim() === post.content.trim() && newFiles.length === 0 : false;
@@ -225,7 +232,8 @@ export function EditPostModal({
   };
 
   return (
-    <ModalBackdrop
+    <>
+      <ModalBackdrop
       isOpen={isOpen}
       onOpenChange={(open) => {
         if (!open && !isPending) handleClose();
@@ -277,7 +285,6 @@ export function EditPostModal({
                 </div>
               </div>
 
-              {/* Existing Attachments */}
               {post?.attachments && post.attachments.length > 0 && (
                 <div className="flex flex-col gap-2">
                   <span className="text-xs font-bold text-foreground/70">
@@ -307,7 +314,6 @@ export function EditPostModal({
                 </div>
               )}
 
-              {/* New Draft Attachments */}
               {newFiles.length > 0 && (
                 <div className="flex flex-col gap-2">
                   <span className="text-xs font-bold text-accent">
@@ -404,47 +410,47 @@ export function EditPostModal({
               </Button>
             </ModalFooter>
           </form>
-
-          {/* Lightbox Preview Modal for Draft New Media via Portal */}
-          {typeof window !== "undefined" &&
-            previewMedia &&
-            createPortal(
-              <div
-                onClick={() => setPreviewMedia(null)}
-                className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 cursor-default animate-in fade-in-0 duration-200"
-              >
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onPress={() => setPreviewMedia(null)}
-                  className="fixed top-5 right-5 z-[100000] w-11 h-11 min-w-0 p-0 rounded-full bg-white/10 hover:bg-white/20 text-white border-white/20 shadow-2xl cursor-pointer"
-                >
-                  <Xmark className="w-6 h-6" />
-                </Button>
-
-                <div className="relative w-full h-full max-w-[95vw] max-h-[92vh] flex items-center justify-center cursor-default">
-                  {previewMedia.type === "IMAGE" ? (
-                    <Image
-                      src={previewMedia.url}
-                      alt={previewMedia.name}
-                      fill
-                      unoptimized
-                      className="object-contain select-none"
-                    />
-                  ) : (
-                    <video
-                      src={previewMedia.url}
-                      controls
-                      autoPlay
-                      className="max-w-5xl max-h-[90vh] rounded-2xl object-contain shadow-2xl"
-                    />
-                  )}
-                </div>
-              </div>,
-              document.body,
-            )}
         </ModalDialog>
       </ModalContainer>
     </ModalBackdrop>
-  );
+
+    {typeof window !== "undefined" &&
+      previewMedia &&
+      createPortal(
+        <div
+          onClick={() => setPreviewMedia(null)}
+          className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 cursor-default animate-in fade-in-0 duration-200"
+        >
+          <Button
+            variant="outline"
+            size="sm"
+            onPress={() => setPreviewMedia(null)}
+            className="fixed top-5 right-5 z-[100000] w-11 h-11 min-w-0 p-0 rounded-full bg-white/10 hover:bg-white/20 text-white border-white/20 shadow-2xl cursor-pointer"
+          >
+            <Xmark className="w-6 h-6" />
+          </Button>
+
+          <div className="relative w-full h-full max-w-[95vw] max-h-[92vh] flex items-center justify-center cursor-default">
+            {previewMedia.type === "IMAGE" ? (
+              <Image
+                src={previewMedia.url}
+                alt={previewMedia.name}
+                fill
+                unoptimized
+                className="object-contain select-none"
+              />
+            ) : (
+              <video
+                src={previewMedia.url}
+                controls
+                autoPlay
+                className="max-w-5xl max-h-[90vh] rounded-2xl object-contain shadow-2xl"
+              />
+            )}
+          </div>
+        </div>,
+        document.body,
+      )}
+  </>
+);
 }

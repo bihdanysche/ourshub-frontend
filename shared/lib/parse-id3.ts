@@ -13,7 +13,6 @@ export async function parseAudioTags(url: string): Promise<AudioTags | null> {
     const buffer = await res.arrayBuffer();
     const data = new DataView(buffer);
 
-    // Check ID3v2 header "ID3"
     if (
       data.getUint8(0) !== 0x49 ||
       data.getUint8(1) !== 0x44 ||
@@ -78,7 +77,6 @@ export async function parseAudioTags(url: string): Promise<AudioTags | null> {
             text = decodeURIComponent(escape(text));
           }
         } catch {
-          // ignore
         }
 
         if (frameId === "TIT2") title = text;
@@ -92,7 +90,6 @@ export async function parseAudioTags(url: string): Promise<AudioTags | null> {
       return { title, artist };
     }
   } catch {
-    // ignore
   }
 
   return null;

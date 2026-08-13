@@ -8,18 +8,17 @@ import {
   DropdownPopover,
   DropdownTrigger,
 } from "@heroui/react";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
+
+const emptySubscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export function AppearanceSection() {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);
 
   const currentLang = (i18n.language || "uk").startsWith("en") ? "en" : "uk";
   const currentTheme = (mounted ? theme : "dark") || "dark";

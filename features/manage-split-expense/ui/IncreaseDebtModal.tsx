@@ -16,7 +16,7 @@ import {
   Spinner,
   toast,
 } from "@heroui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface IncreaseDebtModalProps {
@@ -45,13 +45,14 @@ export function IncreaseDebtModal({
 
   const [amount, setAmount] = useState("");
   const [msg, setMsg] = useState("");
+  const [prevMemberId, setPrevMemberId] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (member) {
-      setAmount("");
-      setMsg("");
-    }
-  }, [member]);
+  const currentMemberId = member?.userId ?? null;
+  if (currentMemberId !== prevMemberId) {
+    setPrevMemberId(currentMemberId);
+    setAmount("");
+    setMsg("");
+  }
 
   const handleSubmit = () => {
     if (!member) return;

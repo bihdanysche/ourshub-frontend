@@ -78,7 +78,6 @@ const getInitials = (name: string): string => {
 };
 
 export function SplitExpensesTab({ split, crewId }: SplitExpensesTabProps) {
-  const { t } = useTranslation();
   const { data: currentUser } = useMe();
   const currentUserId = currentUser?.id;
 

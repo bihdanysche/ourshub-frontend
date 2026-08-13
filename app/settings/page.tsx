@@ -7,7 +7,7 @@ export default function SettingsCorePage() {
 
   useEffect(() => {
     router.replace("/settings/profile");
-  }, []);
+  }, [router]);
 
   return null;
 }

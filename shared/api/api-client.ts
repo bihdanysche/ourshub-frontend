@@ -27,7 +27,17 @@ export function isUnauthorizedError(error: unknown): boolean {
   if (!error) return false;
 
   if (typeof error === "object") {
-    const err = error as Record<string, any>;
+    const err = error as {
+      status?: number;
+      statusCode?: number;
+      response?: {
+        status?: number;
+        data?: {
+          status?: number;
+          statusCode?: number;
+        };
+      };
+    };
     if (err.status === 401) return true;
     if (err.response?.status === 401) return true;
     if (err.statusCode === 401) return true;
@@ -119,7 +129,7 @@ apiClient.interceptors.response.use(
         } as CustomAxiosRequestConfig);
         processQueue(null);
         return apiClient(originalRequest);
-      } catch (refreshError) {
+      } catch {
         processQueue(error);
         return Promise.reject(error);
       } finally {

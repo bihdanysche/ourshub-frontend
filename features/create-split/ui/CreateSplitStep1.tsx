@@ -1,6 +1,6 @@
 "use client";
 
-import { CrewMember, useCrewMembers } from "@/entities/crew";
+import { useCrewMembers } from "@/entities/crew";
 import { useDebounce } from "@/shared/lib/use-debounce";
 import { getAvatarUrl } from "@/shared/lib";
 import {
