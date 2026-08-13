@@ -4,6 +4,7 @@ const isDev = process.env.NODE_ENV !== "production";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["ourshub.pp.ua", "api.ourshub.pp.ua"],
+  output: "standalone",
   ...(isDev && {
     experimental: {
       staleTimes: {
