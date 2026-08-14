@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useSyncExternalStore } from "react";
 import { I18nextProvider } from "react-i18next";
 import i18nInstance from "../i18n";
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false);
+const emptySubscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
 
-  useEffect(() => {
-    setMounted(true);
-  }, [])
+export function I18nProvider({ children }: { children: React.ReactNode }) {
+  const mounted = useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);
 
   if (!mounted) {
     return null;

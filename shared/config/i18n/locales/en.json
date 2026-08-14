@@ -1,6 +1,621 @@
 {
-  "temporary_test": {
-    "welcome": "Hello World!",
-    "change_lang": "Change language"
+  "common": {
+    "success": "Success!",
+    "error": "Error",
+    "cancel": "Cancel",
+    "save_btn": "Save"
+  },
+  "time": {
+    "just_now": "just now",
+    "yesterday": "yesterday"
+  },
+  "header": {
+    "login_via_tg": "Login via Telegram",
+    "settings": "Settings",
+    "logout": "Log out",
+    "error_user": "Failed to load profile"
+  },
+  "auth_guard": {
+    "loading": "Loading...",
+    "server_error_title": "Server Connection Error",
+    "server_error_desc": "Unable to connect to the server. Please check your internet connection or try again later.",
+    "retry_btn": "Try again"
+  },
+  "api_errors": {
+    "BAD_REQUEST": "Bad request",
+    "UNAUTHORIZED": "Authentication required",
+    "FORBIDDEN": "Access denied",
+    "NOT_FOUND": "Not found",
+    "CONFLICT": "Data conflict",
+    "TOO_MANY_REQUESTS": "Too many requests",
+    "INTERNAL_SERVER_ERROR": "Internal server error",
+    "TELEGRAM_AUTH_FAILED": "Telegram authentication failed",
+    "INVALID_TELEGRAM_ID_TOKEN": "Invalid Telegram ID token",
+    "TG_AUTH_EXPIRED": "Telegram authentication has expired",
+    "INVALID_OAUTH_STATE": "Invalid OAuth authentication state",
+    "ALREADY_AUTHENTICATED": "You are already logged in",
+    "AUTH_ALREADY_IN_PROGRESS": "Authentication is already in progress",
+    "SESSION_NOT_FOUND": "Session not found",
+    "SESSION_EXPIRED": "Session has expired",
+    "INVALID_ACCESS_TOKEN": "Invalid access token",
+    "INVALID_REFRESH_TOKEN": "Invalid refresh token",
+    "ACCESS_TOKEN_NOT_EXPIRED": "Access token is not expired",
+    "REFRESH_TOKEN_REQUIRED": "Refresh token is required",
+    "CANNOT_SHUTDOWN_CURRENT_SESSION": "Cannot terminate current session",
+    "EMPTY_UPDATE_PAYLOAD": "Update data cannot be empty",
+    "USERNAME_ALREADY_TAKEN": "This username is already taken",
+    "TOKEN_EXPIRED": "Access token has expired",
+    "CREW_NOT_FOUND": "Crew not found",
+    "POST_NOT_FOUND": "Post not found",
+    "ONLY_AUTHOR_CAN_EDIT_POST": "Only the author can edit this post",
+    "ONLY_AUTHOR_OR_OWNER_CAN_DELETE_POST": "Only the author or crew owner can delete this post",
+    "MEMBER_NOT_FOUND": "Member not found",
+    "INVITATION_NOT_FOUND": "Invitation link not found or expired",
+    "ALREADY_MEMBER": "You are already a member of this crew",
+    "CREW_IS_FULL": "Crew has reached the maximum number of members",
+    "USER_CREWS_LIMIT_REACHED": "You have reached the maximum limit of crews",
+    "ONLY_OWNER_CAN_DELETE_CREW": "Only the crew owner can delete the crew",
+    "ONLY_OWNER_CAN_UPDATE_CREW": "Only the crew owner can update the crew",
+    "ONLY_OWNER_CAN_KICK_MEMBERS": "Only the crew owner can remove members",
+    "CANNOT_EDIT_OTHER_MEMBER_ALIAS": "You cannot change the alias of other members",
+    "CANNOT_LEAVE_AS_OWNER": "The owner cannot leave the crew, delete it instead",
+    "CANNOT_LEAVE_WITH_UNPAID_SPLITS": "You cannot leave the crew while you have unsettled split debts",
+    "CANNOT_KICK_MEMBER_WITH_UNPAID_SPLITS": "Cannot remove member with unsettled split debts",
+    "SPLIT_NOT_FOUND": "Split not found",
+    "EXPENSE_NOT_FOUND": "Expense not found",
+    "NOT_SPLIT_MEMBER": "You are not a participant of this split",
+    "NOT_A_CREW_MEMBER": "User is not a member of this crew",
+    "ONLY_SPENDER_CAN_MODIFY": "Only the expense spender can perform this action",
+    "SPLIT_IS_ARCHIVED": "This split is archived and cannot be modified",
+    "INVALID_AMOUNT": "Invalid payment amount",
+    "PAYMENT_EXCEEDS_MUST_PAY": "Payment amount exceeds the required debt",
+    "MIN_EXPENSES_REQUIRED": "A split must contain at least 1 expense",
+    "MIN_MEMBERS_REQUIRED": "An expense must have at least 2 participants",
+    "MAX_EXPENSES_REACHED": "Maximum number of expenses (10) reached",
+    "CANNOT_REMOVE_SPENDER": "Cannot remove the expense spender from participants",
+    "DUPLICATE_MEMBERS": "Duplicate members are not allowed",
+    "REQUEST_NOT_FOUND": "Expense request not found",
+    "REQUEST_AMOUNT_EXCEEDS_REMAINING_DEBT": "Request amount exceeds your remaining debt",
+    "ONLY_REQUEST_USER_CAN_CANCEL": "Only the request creator can cancel this request",
+    "CANNOT_REQUEST_OWN_EXPENSE": "You cannot create a request for an expense where you are the spender",
+    "UNKNOWN_ERROR": "An unknown error occurred",
+    "IMAGE_REQUIRED": "Image file is required",
+    "INVALID_IMAGE_FORMAT": "Unsupported image format. Allowed formats: PNG, JPG, JPEG, HEIC",
+    "IMAGE_TOO_LARGE": "Image file is too large",
+    "INVALID_IMAGE_ASPECT_RATIO": "Invalid image aspect ratio",
+    "ATTACHMENT_TOO_LARGE": "Attachment file size exceeds the 200 MB limit",
+    "MAX_ATTACHMENTS_EXCEEDED": "Maximum of 15 attachments per post reached",
+    "ATTACHMENT_NOT_FOUND": "Attachment not found"
+  },
+  "crop_modal": {
+    "title": "Crop image",
+    "zoom": "Zoom:",
+    "crop_btn": "Save",
+    "cancel_btn": "Cancel"
+  },
+  "splits": {
+    "create_btn": "New Split",
+    "show_archived": "Show archived",
+    "back_to_splits": "Back to splits",
+    "back_btn": "Back",
+    "next_step_btn": "Next step",
+    "create_split_btn": "Create Split",
+    "submitting_btn": "Creating...",
+    "success_toast": "Split created successfully!",
+    "archived_badge": "Archived",
+    "paid_full_badge": "Paid in full",
+    "active_badge": "Active",
+    "total_paid_label": "Paid {{paid}} of {{total}} ₴",
+    "empty": {
+      "title": "No splits yet",
+      "desc": "Create a split to easily divide group expenses with your squad.",
+      "archived_title": "No archived splits",
+      "archived_desc": "Archived splits will appear here."
+    },
+    "wizard": {
+      "step_indicator": "Step {{current}} of {{total}}",
+      "expense_num": "Expense #{{num}}",
+      "paid_status": "Paid",
+      "you_badge": "You",
+      "title": "Create New Split",
+      "step1_title": "1. Split details & Members",
+      "step1_desc": "Set the split title and choose participants from your squad",
+      "step2_title": "2. Expenses & Shares",
+      "step2_desc": "Add group expenses and configure auto or manual expense splitting",
+      "title_label": "Split title",
+      "title_placeholder": "e.g. Squad Weekend Trip",
+      "desc_label": "Description (optional)",
+      "desc_placeholder": "Add details about this split...",
+      "select_members_title": "Select participants",
+      "search_members_placeholder": "Search members by name or username...",
+      "select_all": "Select all",
+      "deselect_all": "Deselect all",
+      "selected_count": "{{count}} selected",
+      "auto_mode": "Auto split",
+      "manual_mode": "Manual split",
+      "add_expense_btn": "Add expense",
+      "remove_expense_btn": "Remove",
+      "expense_title_label": "Expense title",
+      "expense_title_placeholder": "e.g. Drinks & Snacks",
+      "expense_desc_placeholder": "Expense details...",
+      "total_spent_label": "Total spent amount (₴)",
+      "total_spent_placeholder": "0.00",
+      "spender_label": "Who paid? (Spender)",
+      "expense_participants": "Expense participants",
+      "must_pay_label": "Must pay (₴)",
+      "spender_badge": "Spender"
+    },
+    "tabs": {
+      "expenses": "Expenses",
+      "history": "History",
+      "requests": "Requests"
+    },
+    "detail": {
+      "archive_btn": "Archive split",
+      "archive_confirm": "Are you sure you want to archive this split?",
+      "archived_msg": "Split archived",
+      "total_progress": "Total split progress",
+      "participants_title": "Participants",
+      "expenses_title": "Split expenses ({{count}})",
+      "history_title": "Payment history",
+      "spender_label": "Spender: {{name}}",
+      "paid_of": "{{paid}} of {{total}} ₴",
+      "owes_label": "Owes {{amount}} ₴",
+      "settled_badge": "Settled",
+      "pay_off_btn": "Settle debt",
+      "increase_btn": "Increase debt",
+      "pay_off_modal_title": "Settle debt for {{name}}",
+      "increase_modal_title": "Increase debt for {{name}}",
+      "amount_label": "Amount (₴)",
+      "amount_placeholder": "0.00",
+      "max_pay_off": "Max settlement: {{amount}} ₴",
+      "note_label": "Note / Message (optional)",
+      "note_placeholder": "e.g. Card transfer received...",
+      "submit_pay_off": "Confirm settlement",
+      "submit_increase": "Confirm debt increase",
+      "search_history_placeholder": "Search notes...",
+      "all_members": "All participants",
+      "filter_member": "Filter by member",
+      "history_pay_off": "Settled {{amount}} ₴ for {{name}}",
+      "history_increase": "Increased debt by {{amount}} ₴ for {{name}}",
+      "history_pay_off_badge": "PAY OFF",
+      "history_increase_badge": "INCREASE",
+      "note_from": "Note left by {{spender}} for {{target}}:",
+      "history_by": "by {{name}}",
+      "empty_history": "No history records yet",
+      "add_members_btn": "Add members",
+      "remove_member_btn": "Remove member",
+      "delete_expense_btn": "Delete expense",
+      "delete_expense_modal_title": "Delete Expense?",
+      "delete_expense_modal_desc": "Are you sure you want to delete this expense? This action cannot be undone.",
+      "add_members_modal_title": "Add Members to Expense",
+      "add_members_select_label": "Select crew members to add",
+      "add_members_submit": "Add members",
+      "proc_by_request": "Processed by request",
+      "create_request_btn": "Submit payment claim",
+      "create_request_modal_title": "Submit payment claim for {{title}}",
+      "create_request_submit": "Submit claim",
+      "requests_title": "Payment claims ({{count}})",
+      "filter_role_all": "All claims",
+      "filter_role_as_spender": "Received (I am Spender)",
+      "filter_role_as_user": "Sent by me",
+      "request_claim_text": "{{user}} claims to have paid {{amount}} ₴ for {{title}} (Spender: {{spender}})",
+      "you_claim_text": "You claim to have paid {{amount}} ₴ for {{title}} (Spender: {{spender}})",
+      "cancel_request_btn": "Cancel claim",
+      "accept_request_btn": "Accept",
+      "decline_request_btn": "Decline",
+      "empty_requests": "No active payment claims found",
+      "edit_split_modal_title": "Edit Split",
+      "edit_expense_modal_title": "Edit Expense",
+      "edit_btn": "Edit"
+    },
+    "validation": {
+      "title_min": "Title must be at least 2 characters long",
+      "title_max": "Title cannot exceed 30 characters",
+      "desc_max": "Description cannot exceed 1000 characters",
+      "msg_max": "Note message cannot exceed 50 characters",
+      "user_required": "Please select a member",
+      "spender_required": "Please select a spender",
+      "amount_min_zero": "Amount cannot be negative",
+      "amount_positive": "Amount must be greater than zero",
+      "min_members": "Expense must have at least 2 participants",
+      "min_members_add": "Must add at least 1 member",
+      "min_members_remove": "Must select at least 1 member to remove",
+      "min_expenses": "Split must have at least 1 expense",
+      "max_expenses": "Split cannot have more than 10 expenses"
+    }
+  },
+  "posts": {
+    "attachments": {
+      "add_btn": "Add media",
+      "limit_error": "Maximum 15 attachments allowed per post",
+      "size_error": "File size cannot exceed 200 MB",
+      "delete_confirm": "Are you sure you want to delete this attachment?",
+      "audio_playing": "Playing audio",
+      "audio_paused": "Paused"
+    },
+    "card": {
+      "edited": "edited",
+      "menu": {
+        "edit": "Edit post",
+        "delete": "Delete post"
+      }
+    },
+    "create": {
+      "placeholder": "What's on your mind?",
+      "submit_btn": "Post",
+      "submitting_btn": "Posting...",
+      "success_toast": "Post published successfully"
+    },
+    "delete_modal": {
+      "title": "Delete post",
+      "description": "Are you sure you want to delete this post? This action cannot be undone.",
+      "confirm_btn": "Delete",
+      "cancel_btn": "Cancel",
+      "success_toast": "Post deleted successfully"
+    },
+    "edit_modal": {
+      "title": "Edit post",
+      "subtitle": "Update post content and attachments",
+      "placeholder": "Write something...",
+      "save_btn": "Save changes",
+      "cancel_btn": "Cancel",
+      "success_toast": "Post updated successfully",
+      "existing_attachments": "Existing attachments",
+      "new_attachments": "New attachments to upload"
+    },
+    "empty": {
+      "title": "No posts yet",
+      "desc": "Be the first to share something with your squad!"
+    },
+    "loading": "Loading posts...",
+    "error_title": "Failed to load posts",
+    "error_desc": "An error occurred while fetching posts.",
+    "retry_btn": "Try again",
+    "validation": {
+      "content_min": "Post cannot be empty",
+      "content_max": "Post content cannot exceed 1500 characters",
+      "content_trim": "Post cannot start or end with spaces"
+    }
+  },
+  "auth": {
+    "success_auth_desc": "You successfully logged in via Telegram!"
+  },
+  "settings": {
+    "title": "Settings",
+    "nav": {
+      "profile": "My Profile",
+      "sessions": "Sessions",
+      "appearance": "Appearance"
+    },
+    "profile": {
+      "title": "My Profile",
+      "description": "Manage your profile details and personal information",
+      "avatar_title": "Profile Avatar",
+      "upload_avatar_btn": "Upload avatar",
+      "delete_avatar_btn": "Delete avatar",
+      "delete_avatar_confirm": "Are you sure you want to delete your avatar?",
+      "name_label": "Name",
+      "name_placeholder": "Enter your name",
+      "name_helper": "Your display name visible to other users",
+      "username_label": "Username",
+      "username_placeholder": "Enter username",
+      "username_helper": "Unique username used to identify your account",
+      "cancel_btn": "Cancel",
+      "save_btn": "Save changes",
+      "save_success": "Profile updated successfully",
+      "validation": {
+        "name_min": "Name must be at least 1 character long",
+        "name_max": "Name cannot exceed 30 characters",
+        "name_trim": "Name cannot start or end with spaces",
+        "username_min": "Username must be at least 3 characters long",
+        "username_max": "Username cannot exceed 30 characters",
+        "username_start_letter": "Username must start with a Latin letter",
+        "username_chars": "Only Latin letters, numbers, underscores, and dots are allowed",
+        "username_spaces": "Username cannot contain spaces"
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "description": "Customize your interface theme and language",
+      "language": {
+        "title": "Interface Language",
+        "description": "Select the language used throughout the application",
+        "en": "English",
+        "uk": "Ukrainian"
+      },
+      "theme": {
+        "title": "Theme",
+        "description": "Select your preferred color mode",
+        "dark": "Dark",
+        "light": "Light"
+      }
+    },
+    "sessions": {
+      "title": "Sessions",
+      "description": "Manage active sessions and devices connected to your account",
+      "current_title": "Current Session",
+      "current_badge": "This device",
+      "other_title": "Other Sessions",
+      "terminate_all_btn": "Terminate all others",
+      "terminate_btn": "Terminate",
+      "last_active": "Last active",
+      "created_at": "Created",
+      "no_other_sessions": "No other active sessions",
+      "no_other_sessions_desc": "You are only logged in on this device.",
+      "error_title": "Failed to load sessions",
+      "error_desc": "An error occurred while fetching your active sessions.",
+      "retry_btn": "Try again",
+      "modal_single_title": "Terminate Session?",
+      "modal_single_desc": "Are you sure you want to terminate this session? The device will be logged out immediately.",
+      "modal_all_title": "Terminate All Other Sessions?",
+      "modal_all_desc": "Are you sure you want to terminate all other active sessions? All other devices will be logged out.",
+      "cancel_btn": "Cancel",
+      "confirm_btn": "Terminate",
+      "terminate_success": "Session terminated successfully",
+      "terminate_all_success": "All other sessions have been terminated"
+    }
+  },
+  "landing": {
+    "badge": "For you and your squad",
+    "hero_title_1": "A cozy social network",
+    "hero_title_2": "for your friend circle.",
+    "hero_description": "Create private spaces for your squad, share photos, memories, and moments strictly between yourselves. And when hanging out, easily split group expenses without messy calculations. Fast login via Telegram.",
+    "cta_primary": "Log in via Telegram",
+    "cta_secondary": "Explore features",
+    "highlights": {
+      "private_title": "Strictly for friends",
+      "private_desc": "Posts and photos are visible only to company members",
+      "instant_auth_title": "Simple login",
+      "instant_auth_desc": "1-click Telegram login without complicated forms",
+      "smart_splits_title": "Shared splits",
+      "smart_splits_desc": "Simple expense splitting after parties and road trips"
+    },
+    "example_box": {
+      "badge": "Real life example",
+      "title": "Example: Squad party or a weekend getaway",
+      "text": "You got together with your crew for a hangout or trip. One person covers food and drinks. They simply create a split inside your company, enter the total bill, and Ours Hub calculates everyone's share while showing who paid and who owes."
+    },
+    "features": {
+      "badge": "About the space",
+      "title": "Everything for a warm vibe",
+      "subtitle": "No public feed, no strangers, and no awkward math after parties.",
+      "company": {
+        "title": "Private Companies",
+        "desc": "Create separate spaces for your closest friends, roommates, or travel buddies. Everything posted inside stays strictly between you."
+      },
+      "media": {
+        "title": "A feed for yourselves",
+        "desc": "Share photos, inside jokes, and party memories. Zero algorithms and zero strangers."
+      },
+      "splits": {
+        "title": "Effortless splits",
+        "desc": "Someone bought snacks and drinks for the party? Create a split in your company and easily keep track of who contributed."
+      },
+      "auth": {
+        "title": "Telegram login",
+        "desc": "No tedious registration forms or passwords to memorize. One click with Telegram and you are with your squad."
+      },
+      "transparency": {
+        "title": "Complete transparency",
+        "desc": "Everyone in the company sees who covered the bill, who already sent their share, and what's left."
+      },
+      "custom_shares": {
+        "title": "Flexible splitting",
+        "desc": "Split equally among all participants or set individual amounts when someone ordered separately."
+      }
+    },
+    "how_it_works": {
+      "badge": "How it works",
+      "title": "Super straightforward",
+      "subtitle": "Get started and hang out with your crew in less than a minute.",
+      "step1_title": "Log in with Telegram",
+      "step1_desc": "No emails or passwords — just authenticate in one click.",
+      "step2_title": "Create a Company",
+      "step2_desc": "Invite your friends using a direct invite link.",
+      "step3_title": "Share moments",
+      "step3_desc": "Post photos, inside memes, and plan your next hangouts.",
+      "step4_title": "Split shared bills",
+      "step4_desc": "Create splits for group purchases and track contributions."
+    },
+    "use_cases": {
+      "badge": "Everyday use cases",
+      "title": "Built for shared memories",
+      "item1_title": "Parties & Celebrations",
+      "item1_desc": "Birthdays, celebrations, or weekend hangouts — settle the table bill without messy calculators.",
+      "item2_title": "Trips & Getaways",
+      "item2_desc": "Cabin rentals, road trips, barbecues — keep shared memories and split expenses fairly.",
+      "item3_title": "Roommates & Flatmates",
+      "item3_desc": "Utilities, apartment groceries, and a private cozy chat all in one space.",
+      "item4_title": "Best Friend Circles",
+      "item4_desc": "Inside jokes, photo dumps, and a comfortable sanctuary for your inner circle."
+    },
+    "cta_banner": {
+      "title": "Bring your squad together",
+      "subtitle": "Create a cozy private space for your friends and enjoy your time together without friction.",
+      "button": "Log in via Telegram",
+      "note": "Fast • Free • No passwords"
+    },
+    "footer": {
+      "brand_desc": "A cozy social space and shared expense splitter for your inner circle.",
+      "privacy_note": "Private space for your company of friends",
+      "rights": "All rights reserved."
+    }
+  },
+  "home": {
+    "title": "My Crews",
+    "subtitle": "Private spaces and friendly squad hangouts",
+    "create_crew_btn": "Create Crew",
+    "members_count_one": "{{count}} member",
+    "members_count_other": "{{count}} members",
+    "open_crew": "Open",
+    "create_card_title": "Create new crew",
+    "create_card_desc": "Set up a private space for your friends",
+    "empty_title": "No crews yet",
+    "empty_desc": "You haven't joined or created any crews yet. Create your first crew to get started!",
+    "create_first_crew": "Create your first crew",
+    "error_title": "Failed to load crews",
+    "error_desc": "An error occurred while fetching your crews list.",
+    "retry_btn": "Try again",
+    "roles": {
+      "owner": "Owner",
+      "member": "Member"
+    },
+    "card_menu": {
+      "edit": "Edit crew",
+      "delete": "Delete crew",
+      "leave": "Leave crew"
+    },
+    "create_modal": {
+      "title": "Create Crew",
+      "subtitle": "Create a private space for your squad",
+      "name_label": "Crew name",
+      "name_placeholder": "e.g. The Troublemakers",
+      "cancel_btn": "Cancel",
+      "submit_btn": "Create",
+      "success_toast": "Crew created successfully!"
+    },
+    "edit_modal": {
+      "title": "Edit Crew",
+      "subtitle": "Change your squad name",
+      "name_label": "Crew name",
+      "name_placeholder": "Enter crew name",
+      "cancel_btn": "Cancel",
+      "save_btn": "Save changes",
+      "success_toast": "Crew updated successfully!"
+    },
+    "delete_modal": {
+      "title": "Delete Crew",
+      "desc": "Are you sure you want to delete \"{{title}}\"? This will permanently delete the crew for all members.",
+      "confirm_label": "Type CONFIRM to proceed",
+      "confirm_placeholder": "CONFIRM",
+      "cancel_btn": "Cancel",
+      "delete_btn": "Delete crew",
+      "success_toast": "Crew deleted successfully!"
+    },
+    "leave_modal": {
+      "title": "Leave Crew",
+      "desc": "Are you sure you want to leave \"{{title}}\"? You will need an invite link to rejoin.",
+      "cancel_btn": "Cancel",
+      "leave_btn": "Leave crew",
+      "success_toast": "You left the crew"
+    },
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "page_info": "Page {{current}} of {{total}}"
+    }
+  },
+  "crew": {
+    "validation": {
+      "title_min": "Title must be at least 2 characters long",
+      "title_max": "Title cannot exceed 50 characters",
+      "title_trim": "Title cannot start or end with spaces",
+      "alias_max": "Alias cannot exceed 20 characters",
+      "alias_trim": "Alias cannot start or end with spaces"
+    }
+  },
+  "crew_page": {
+    "upload_avatar_btn": "Upload crew avatar",
+    "delete_avatar_btn": "Delete crew avatar",
+    "delete_avatar_confirm": "Are you sure you want to delete the crew avatar?",
+    "upload_cover_btn": "Upload cover",
+    "delete_cover_btn": "Delete cover",
+    "delete_cover_confirm": "Are you sure you want to delete the crew cover?",
+    "crop_avatar_title": "Crop Crew Avatar",
+    "crop_cover_title": "Crop Crew Cover",
+    "roles": {
+      "owner": "You are Owner",
+      "member": "You are Member"
+    },
+    "invite_btn": "Invite",
+    "back_to_home": "Back to Home",
+    "not_found_title": "Crew Not Found",
+    "not_found_desc": "The crew you are looking for does not exist or you do not have permission to view it.",
+    "error_title": "Failed to load crew",
+    "error_desc": "An error occurred while loading crew details.",
+    "tabs": {
+      "posts": "Posts",
+      "splits": "Splits",
+      "members": "Members"
+    },
+    "placeholders": {
+      "posts_title": "No posts yet",
+      "posts_desc": "Posts and photo dumps from your crew will appear here soon.",
+      "splits_title": "No splits yet",
+      "splits_desc": "Shared expenses and party bills will appear here.",
+      "members_title": "Crew Members",
+      "members_desc": "List of squad members and their roles."
+    },
+    "invite_modal": {
+      "title": "Invite to Crew",
+      "subtitle": "Share this QR code or link with friends to join your crew",
+      "qr_alt": "QR code for invite link",
+      "link_label": "Invitation link",
+      "copy_btn": "Copy",
+      "copied_btn": "Copied",
+      "copied_toast": "Invitation link copied to clipboard!",
+      "close_btn": "Close"
+    },
+    "members_list": {
+      "title": "Squad Members",
+      "subtitle": "People in this crew",
+      "owner_badge": "Owner",
+      "alias_label": "Alias",
+      "you_badge": "You",
+      "menu": {
+        "set_alias": "Set alias",
+        "edit_alias": "Edit alias",
+        "kick": "Remove from crew"
+      },
+      "alias_modal": {
+        "title": "Member Alias",
+        "subtitle": "Set a custom nickname for {{name}} in this crew",
+        "label": "Alias / Nickname",
+        "placeholder": "e.g. Maverick",
+        "helper": "Max 20 characters, leave empty to remove",
+        "cancel_btn": "Cancel",
+        "save_btn": "Save alias",
+        "success_toast": "Alias updated successfully!"
+      },
+      "kick_modal": {
+        "title": "Remove Member?",
+        "desc": "Are you sure you want to remove \"{{name}}\" from the crew?",
+        "cancel_btn": "Cancel",
+        "kick_btn": "Remove member",
+        "success_toast": "Member removed from the crew"
+      },
+      "loading": "Loading members...",
+      "error_title": "Failed to load members",
+      "error_desc": "An error occurred while fetching the members list.",
+      "empty_title": "No members found",
+      "empty_desc": "This crew currently has no members."
+    }
+  },
+  "join_crew": {
+    "title": "Join Crew",
+    "subtitle": "You've been invited to join a squad",
+    "question": "Do you want to join this crew?",
+    "alias_label": "Your nickname in this crew (optional)",
+    "alias_placeholder": "e.g. Maverick",
+    "alias_helper": "Max 20 characters",
+    "join_btn": "Join Crew",
+    "cancel_btn": "No, take me home",
+    "login_required_title": "Authentication Required",
+    "login_required_desc": "To join this crew, please log in with your Telegram account first.",
+    "success_toast": "You have successfully joined the crew!",
+    "already_member_title": "Already a Member",
+    "already_member_desc": "You are already a member of this crew.",
+    "go_to_crew_btn": "Go to Crew",
+    "crew_full_title": "Crew is Full",
+    "crew_full_desc": "This crew has reached its maximum limit of 15 members and cannot accept new members.",
+    "not_found_title": "Invitation Not Found",
+    "not_found_desc": "This invitation link is invalid or has expired.",
+    "limit_reached_title": "Crews Limit Reached",
+    "limit_reached_desc": "You have reached the maximum limit of 10 crews. Please leave a crew before joining a new one.",
+    "error_title": "Failed to Load Invitation",
+    "error_desc": "An error occurred while loading this invitation.",
+    "retry_btn": "Try again",
+    "back_to_home": "Back to Home"
   }
 }

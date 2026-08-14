@@ -1,113 +1,142 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-import i18n from "../config/i18n/i18n";
-import { toast } from "@/shared/ui/sonner";
-
-type RetryRequestConfig = InternalAxiosRequestConfig & {
-	_retry?: boolean;
-};
-
-type ApiError = {
-	error_code?: string;
-};
 
 export const apiClient = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_URL || "/api",
-	timeout: 10000,
-	headers: {
-		"Content-Type": "application/json",
-	},
-	withCredentials: true,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
 });
 
-const refreshClient = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_URL || "/api",
-	timeout: 10000,
-	headers: {
-		"Content-Type": "application/json",
-	},
-	withCredentials: true,
-});
+export function getApiErrorCode(error: unknown): string | null {
+  if (error && typeof error === "object" && "response" in error) {
+    const response = (error as { response?: { data?: unknown } }).response;
+    if (
+      response?.data &&
+      typeof response.data === "object" &&
+      "error_code" in response.data
+    ) {
+      return (response.data as { error_code: string }).error_code;
+    }
+  }
+  return null;
+}
+
+export function isUnauthorizedError(error: unknown): boolean {
+  if (!error) return false;
+
+  if (typeof error === "object") {
+    const err = error as {
+      status?: number;
+      statusCode?: number;
+      response?: {
+        status?: number;
+        data?: {
+          status?: number;
+          statusCode?: number;
+        };
+      };
+    };
+    if (err.status === 401) return true;
+    if (err.response?.status === 401) return true;
+    if (err.statusCode === 401) return true;
+    if (err.response?.data?.statusCode === 401) return true;
+    if (err.response?.data?.status === 401) return true;
+  }
+
+  const code = getApiErrorCode(error);
+  if (
+    code === "UNAUTHORIZED" ||
+    code === "REFRESH_TOKEN_REQUIRED" ||
+    code === "SESSION_EXPIRED" ||
+    code === "INVALID_ACCESS_TOKEN" ||
+    code === "INVALID_REFRESH_TOKEN"
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+export const getErrorMessage = getApiErrorCode;
+
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
 let isRefreshing = false;
-
 let failedQueue: Array<{
-	resolve: () => void;
-	reject: (error: unknown) => void;
+  resolve: (value?: unknown) => void;
+  reject: (reason?: unknown) => void;
 }> = [];
 
-function processQueue(error?: unknown) {
-	failedQueue.forEach(({ resolve, reject }) => {
-		if (error) {
-			reject(error);
-		} else {
-			resolve();
-		}
-	});
-
-	failedQueue = [];
-}
+const processQueue = (error: AxiosError | null) => {
+  failedQueue.forEach((promise) => {
+    if (error) {
+      promise.reject(error);
+    } else {
+      promise.resolve();
+    }
+  });
+  failedQueue = [];
+};
 
 apiClient.interceptors.response.use(
-	response => response.data,
+  (response) => response.data,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as CustomAxiosRequestConfig;
 
-	async (error: AxiosError<ApiError>) => {
-		const originalRequest = error.config as RetryRequestConfig;
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
 
-		if (!originalRequest) {
-			return Promise.reject(error);
-		}
+    const isAuthEndpoint =
+      originalRequest.url?.includes("/auth/refresh") ||
+      originalRequest.url?.includes("/auth/logout") ||
+      originalRequest.url?.includes("/auth/telegram");
 
-		const errorCode = error.response?.data?.error_code;
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isAuthEndpoint
+    ) {
+      const code = getApiErrorCode(error);
 
-		if (
-			error.response?.status !== 401 ||
-			errorCode !== "ACCESS_TOKEN_EXPIRED" ||
-			originalRequest._retry
-		) {
-			return Promise.reject(error);
-		}
+      if (
+        code === "UNAUTHORIZED" ||
+        code === "REFRESH_TOKEN_REQUIRED" ||
+        code === "SESSION_EXPIRED" ||
+        code === "INVALID_REFRESH_TOKEN"
+      ) {
+        return Promise.reject(error);
+      }
 
-		originalRequest._retry = true;
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(() => apiClient(originalRequest))
+          .catch((err) => Promise.reject(err));
+      }
 
-		if (isRefreshing) {
-			return new Promise<void>((resolve, reject) => {
-				failedQueue.push({
-					resolve,
-					reject,
-				});
-			}).then(() => apiClient(originalRequest));
-		}
+      originalRequest._retry = true;
+      isRefreshing = true;
 
-		isRefreshing = true;
+      try {
+        await apiClient.post("/auth/refresh", {}, {
+          _retry: true,
+        } as CustomAxiosRequestConfig);
+        processQueue(null);
+        return apiClient(originalRequest);
+      } catch {
+        processQueue(error);
+        return Promise.reject(error);
+      } finally {
+        isRefreshing = false;
+      }
+    }
 
-		try {
-			await refreshClient.post("/auth/refresh");
-
-			processQueue();
-
-			return apiClient(originalRequest);
-		} catch (refreshError) {
-			processQueue(refreshError);
-
-			return Promise.reject(refreshError);
-		} finally {
-			isRefreshing = false;
-		}
-	}
+    return Promise.reject(error);
+  },
 );
-
-export function getErrorMessage(error: unknown): string | null {
-	if (error && typeof error === "object" && "response" in error) {
-		const response = (error as { response?: { data?: unknown } }).response;
-		if (response?.data && typeof response.data === "object" && "error_code" in response.data) {
-			return (response.data as { error_code: string }).error_code;
-		}
-	}
-	return null;
-}
-
-export const toastApiError = (error: unknown) => {
-	const code = getErrorMessage(error);
-	const t = i18n.t;
-	toast.error(t(i18n.exists(`api_errors.${code}`) ? `api_errors.${code}` : `api_errors.UNKNOWN`));
-};
