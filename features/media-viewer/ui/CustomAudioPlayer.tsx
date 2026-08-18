@@ -44,6 +44,7 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
   const audioCtxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animFrameRef = useRef<number | null>(null);
+  const discWrapperRef = useRef<HTMLDivElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
@@ -53,10 +54,8 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
 
-  const [discScale, setDiscScale] = useState(1.0);
   const [metadataTitle, setMetadataTitle] = useState<string | null>(null);
 
-  // Parse ID3 Tags for title & artist with Cyrillic support
   useEffect(() => {
     let active = true;
     parseAudioTags(mediaUrl).then((tags) => {
@@ -72,9 +71,17 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
     };
   }, [mediaUrl]);
 
+  useEffect(() => {
+    return () => {
+      if (audioCtxRef.current && audioCtxRef.current.state !== "closed") {
+        audioCtxRef.current.close().catch(() => {});
+        audioCtxRef.current = null;
+      }
+    };
+  }, []);
+
   const displayName = metadataTitle || formatAttachmentName(name, src);
 
-  // Setup Web Audio API Analyser for zero-latency sub-bass analysis
   const setupAudioContext = () => {
     if (!audioRef.current || audioCtxRef.current) return;
 
@@ -85,8 +92,8 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
       const audioCtx = new AudioCtx();
       const analyser = audioCtx.createAnalyser();
 
-      analyser.fftSize = 64; // Fast low-latency FFT
-      analyser.smoothingTimeConstant = 0.0; // ZERO smoothing for instant sharp kick transient response!
+      analyser.fftSize = 64;
+      analyser.smoothingTimeConstant = 0.0;
 
       const source = audioCtx.createMediaElementSource(audioRef.current);
       source.connect(analyser);
@@ -95,7 +102,6 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
       audioCtxRef.current = audioCtx;
       analyserRef.current = analyser;
     } catch {
-      // AudioContext fallback
     }
   };
 
@@ -105,7 +111,9 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
     updateBassRef.current = () => {
       const analyser = analyserRef.current;
       if (!analyser || !isPlaying || isScrubbing) {
-        setDiscScale(1.0);
+        if (discWrapperRef.current) {
+          discWrapperRef.current.style.transform = "scale(1)";
+        }
         animFrameRef.current = null;
         return;
       }
@@ -118,9 +126,13 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
       if (rawBass > 0.3) {
         const powerBass = Math.pow((rawBass - 0.3) / 0.7, 1.8);
         const targetScale = 1.0 + powerBass * 0.22;
-        setDiscScale(targetScale);
+        if (discWrapperRef.current) {
+          discWrapperRef.current.style.transform = `scale(${targetScale})`;
+        }
       } else {
-        setDiscScale(1.0);
+        if (discWrapperRef.current) {
+          discWrapperRef.current.style.transform = "scale(1)";
+        }
       }
 
       animFrameRef.current = requestAnimationFrame(() => updateBassRef.current());
@@ -141,7 +153,9 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
         cancelAnimationFrame(animFrameRef.current);
         animFrameRef.current = null;
       }
-      requestAnimationFrame(() => setDiscScale(1.0));
+      if (discWrapperRef.current) {
+        discWrapperRef.current.style.transform = "scale(1)";
+      }
     }
 
     return () => {
@@ -152,7 +166,6 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
     };
   }, [isPlaying, isScrubbing]);
 
-  // Stop other playing audio instances globally
   useEffect(() => {
     const handleGlobalPlay = (e: Event) => {
       const customEvent = e as CustomEvent<{ src: string }>;
@@ -259,30 +272,26 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
       />
 
       <div className="flex items-center gap-4 w-full">
-        {/* Ultra-Sharp Instant Sub-Bass Reaction Scale Wrapper */}
         <div
+          ref={discWrapperRef}
           className="shrink-0 transition-transform duration-[40ms] ease-out"
-          style={{ transform: `scale(${discScale})` }}
+          style={{ transform: "scale(1)" }}
         >
-          {/* Round Vinyl Record Disc (Freezes rotation when scrubbing or paused) */}
           <div
             className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-accent/40 via-zinc-950 to-purple-900 border-2 border-accent/50 shadow-xl flex items-center justify-center relative overflow-hidden animate-spin ${
               isPlaying && !isScrubbing ? "" : "[animation-play-state:paused]"
             }`}
             style={{ animationDuration: "5s" }}
           >
-            {/* Vinyl Record Grooves */}
             <div className="absolute inset-1.5 rounded-full border border-white/10" />
             <div className="absolute inset-3 rounded-full border border-white/10" />
 
-            {/* Center Disc Hole */}
             <div className="w-5 h-5 rounded-full bg-zinc-900 border border-accent/60 flex items-center justify-center shadow-inner z-10">
               <MusicNote className="w-3 h-3 text-accent" />
             </div>
           </div>
         </div>
 
-        {/* Info & Progress */}
         <div className="flex flex-col flex-1 min-w-0 gap-2">
           <div className="flex items-center justify-between gap-3">
             <span className="text-sm font-bold text-foreground truncate flex items-center gap-2">
@@ -294,7 +303,6 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
             </span>
           </div>
 
-          {/* YouTube-Style Progress Slider (Freezes rotation while dragging, commits on release) */}
           <input
             type="range"
             step="any"
@@ -312,10 +320,8 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
         </div>
       </div>
 
-      {/* Controls Bar */}
       <div className="flex items-center justify-between gap-3 pt-1">
         <div className="flex items-center gap-2">
-          {/* Solid Filled Play/Pause Button */}
           <Button
             variant="primary"
             size="md"
@@ -329,7 +335,6 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
             )}
           </Button>
 
-          {/* Repeat Button */}
           <Button
             variant="outline"
             size="sm"
@@ -345,7 +350,6 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
           </Button>
         </div>
 
-        {/* Volume & Mute */}
         <div className="flex items-center gap-2 shrink-0">
           <Button
             variant="outline"
@@ -377,3 +381,4 @@ export function CustomAudioPlayer({ src, name }: CustomAudioPlayerProps) {
     </div>
   );
 }
+

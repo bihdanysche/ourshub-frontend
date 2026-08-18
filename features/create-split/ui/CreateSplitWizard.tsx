@@ -19,6 +19,8 @@ interface CreateSplitWizardProps {
 const round2 = (num: number): number =>
   Math.round((num + Number.EPSILON) * 100) / 100;
 
+const EMPTY_MEMBERS: CrewMember[] = [];
+
 export function CreateSplitWizard({ crewId }: CreateSplitWizardProps) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -37,7 +39,10 @@ export function CreateSplitWizard({ crewId }: CreateSplitWizardProps) {
   );
 
   const { data: membersData } = useCrewMembers(crewId);
-  const allMembers = useMemo(() => membersData?.items ?? [], [membersData?.items]);
+  const allMembers = useMemo(
+    () => membersData?.items ?? EMPTY_MEMBERS,
+    [membersData?.items],
+  );
 
   const effectiveSelectedMemberIds = useMemo(() => {
     if (!currentUserId) return selectedMemberIds;
