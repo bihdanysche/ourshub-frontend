@@ -56,6 +56,21 @@ export function CreatePostForm({ crewId }: CreatePostFormProps) {
   const contentValue = useWatch({ control, name: "content" }) || "";
   const isTooLong = contentValue.length > 1500;
 
+  const draftFilesRef = useRef(draftFiles);
+  useEffect(() => {
+    draftFilesRef.current = draftFiles;
+  }, [draftFiles]);
+
+  useEffect(() => {
+    return () => {
+      draftFilesRef.current.forEach((df) => {
+        if (df.previewUrl) {
+          URL.revokeObjectURL(df.previewUrl);
+        }
+      });
+    };
+  }, []);
+
   useEffect(() => {
     const el = textareaRef.current;
     if (el) {

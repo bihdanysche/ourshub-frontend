@@ -186,7 +186,6 @@ export function CrewHeader({ crew }: CrewHeaderProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Cover Container */}
       <div className="relative w-full aspect-[3/1] max-h-72 sm:max-h-80 rounded-3xl overflow-hidden border border-border/60 bg-gradient-to-br from-accent/20 via-surface-secondary/70 to-accent/10 shadow-xs group">
         {crew.cover ? (
           <Image
@@ -246,7 +245,6 @@ export function CrewHeader({ crew }: CrewHeaderProps) {
         )}
       </div>
 
-      {/* Header Info */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 px-2 sm:px-4 -mt-16 sm:-mt-20 relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-end gap-4">
           <div className="relative group/avatar">

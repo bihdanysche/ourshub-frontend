@@ -8,7 +8,10 @@ export const useSessions = () => {
     queryKey: sessionKeys.list(),
     queryFn: async () => {
       const res = await apiClient.get<Session[]>("/auth/sessions");
-      return (res as unknown as { data: Session[] })?.data ?? (res as unknown as Session[]);
+      return (
+        (res as unknown as { data?: Session[] })?.data ??
+        (res as unknown as Session[])
+      );
     },
   });
 };
